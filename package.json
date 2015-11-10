@@ -1,0 +1,21 @@
+{
+	"name":"asynchronous server technologies",
+	"description":"class @ ece",
+	"version":"0.0.1",
+	"author":{
+		"name":"cesar",
+		"website":"github.com/cesarBere"
+	},
+	"website":"adaltas.com",
+	"dependencies":{
+		"mymodule":"1.2.y",
+		"mymodule":"~1.2.x",
+		"mymodule":">=1.2.z",
+		"mymodule":"*",
+		"mylocalmodule":"file:./server.js",
+		"mygithubmodule":"git_account/module#"
+	},
+	"devDependencies":{
+		"test-module":"*"
+	}
+}
