@@ -13,7 +13,6 @@
     "mygithubmodule": "git_account/module#"
   },
   "devDependencies": {
-    "mocha": "^2.3.4",
     "should": "^7.1.1",
     "test-module": "*"
   }
