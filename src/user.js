@@ -11,7 +11,7 @@ module.exports={
 		//get a user
 		
 		var user={
-			name:"cesar",
+			name:"phil",
 			id:id
 		}
 		callback(user);
