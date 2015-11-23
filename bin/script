@@ -1,4 +1,5 @@
 #!/bin/bash
-
-
+cd ..
+echo "Affichage de la commande mocha (Tests)"
+mocha
 

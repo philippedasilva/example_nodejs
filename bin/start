@@ -1,0 +1,5 @@
+#!/bin/bash
+cd ..
+cd src/
+echo "Initialisation du serveur ..."
+node server
