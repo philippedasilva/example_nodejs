@@ -1,5 +1,5 @@
 #!/bin/bash
 cd ..
-cd src/
+cd lib/src/
 echo "Initialisation du serveur ..."
 node server
