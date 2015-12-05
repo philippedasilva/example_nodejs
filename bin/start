@@ -1,5 +1,11 @@
 #!/bin/bash
 cd ..
-cd lib/src/
+cd public/js
+coffee -c index.coffee
+cd ../../src
+coffee -c app.coffee
+coffee -c metrics.coffee
+coffee -c db.coffee
+
 echo "Initialisation du serveur ..."
-node server
+node app.js
