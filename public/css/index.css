@@ -26,12 +26,6 @@ td {
 .btn {
   text-align: center;
 }
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
-.area {
-  fill: #4682b4;
+#graph {
+  border: solid 1px #000;
 }

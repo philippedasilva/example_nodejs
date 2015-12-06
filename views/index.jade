@@ -35,7 +35,9 @@ block content
              button.btn.btn-success#get-metrics Get
 
           .row
-             table#tab-metrics(border="1")
+             section#bloc_metrics
+                table#tab-metrics(border="1").col-lg-3
+                svg#graph.col-lg-9
 
           .row
              form.form-inline#save(action='metric/1.json',method='post')

@@ -8,6 +8,32 @@ module.exports =
   ###
 
   get: () ->
+    return [
+      timestamp: new Date('2015-12-01 10:30 UTC').getTime(),
+      value: 26
+    ,
+      timestamp: new Date('2015-12-01 10:35 UTC').getTime(),
+      value: 23
+    ,
+      timestamp: new Date('2015-12-01 10:40 UTC').getTime(),
+      value: 20
+    ,
+      timestamp: new Date('2015-12-01 10:45 UTC').getTime(),
+      value: 19
+    ,
+      timestamp: new Date('2015-12-01 10:50 UTC').getTime(),
+      value: 18
+    ,
+      timestamp: new Date('2015-12-01 10:55 UTC').getTime(),
+      value: 20
+    ,
+      timestamp: new Date('2015-12-01 11:00 UTC').getTime(),
+      value: 22
+    ,
+      timestamp: new Date('2015-12-01 11:15 UTC').getTime(),
+      value: 25  
+]
+    ###
     rs = db.createReadStream()
     key = ''
     value= ''
@@ -28,29 +54,9 @@ module.exports =
        key : "#{key}",
        value : "#{value}"
     ]
-
     ###
-    return [
 
-      timestamp: new Date('2015-12-01 10:30 UTC').getTime(),
-      value: 26
-    ,
-      timestamp: new Date('2015-12-01 10:35 UTC').getTime(),
-      value: 23
-    ,
-      timestamp: new Date('2015-12-01 10:40 UTC').getTime(),
-      value: 20
-    ,
-      timestamp: new Date('2015-12-01 10:45 UTC').getTime(),
-      value: 19
-    ,
-      timestamp: new Date('2015-12-01 10:50 UTC').getTime(),
-      value: 18
-    ,
-      timestamp: new Date('2015-12-01 10:55 UTC').getTime(),
-      value: 20
-    ]
-    ###
+
   ###
   `save(id, metrics, cb)`
   ------------------------

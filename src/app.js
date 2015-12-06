@@ -72,7 +72,7 @@
   });
 
   app.get('/metrics.json', function(req, res) {
-    return res.status(200).send(metrics.get());
+    return res.status(200).json(metrics.get());
   });
 
   app.get('/hello/:name', function(req, res) {

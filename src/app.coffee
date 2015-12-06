@@ -59,7 +59,7 @@ app.get '/',(req,res) ->
      #title: 'Test Page'
 
 app.get '/metrics.json', (req, res) ->
-  res.status(200).send metrics.get()
+  res.status(200).json metrics.get()
 
 app.get '/hello/:name', (req, res) ->
   res.status(200).send req.params.name
