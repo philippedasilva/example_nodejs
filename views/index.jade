@@ -2,47 +2,66 @@ extend layout
 
 block head
   title DefaultPage
-  link(rel="stylesheet",href="/css/bootstrap.min.css")
-  link(rel="stylesheet",href="/css/index.css")
-  script(src="/js/jquery.min.js")
-  script(src="/js/bootstrap.min.js")
-  script(src="/js/d3.min.js")
-  script(src="/js/graph.js")
-  script(src="/js/index.js")
 
 block content
     div.container
-        header
-           h1 TP Asynchronous Server Technologies
-
         main
+         .row
+             form.form-inline#login(action='/',method='post')
+               label(for='login') Login
+               input(type='text', name='login', class='form-control', placeholder="Votre login (ex: root)")
+               label(for='password') Password
+               input(type='password', name='password',class='form-control', placeholder="Mot de passe (ex: root)")
+               input(type='submit', name='submit',class='form-control btn btn-primary',id='submit_login',value='Connect')
           .row
-            form.form-inline#login
-              label(for='login') Login
-              input(type='text', name='login', class='form-control', placeholder="Votre login")
-              label(for='password') Password
-              input(type='password', name='password',class='form-control', placeholder="Mot de passe")
-              input(type='submit', name='submit',class='form-control btn btn-primary')
+            section.col-lg-2
 
-              p#logintxt Login : le login de la personne en question (session)
+            section#apropos.col-lg-8
+              h3 But
+              p
+                |Cette interface permet à chaque utilisateur de déposer ses mesures et d'obtenir un graphe avec celles-ci.
+                br
+                |Conçu en NodeJS pour la partie Back-End avec le framework Express
+                br
+                |et utilisant des technos récentes de Front-End avec les compilateurs suivants:
+                br
+                br
+                |Jade pour le HTML
+                br
+                |Stylus pour le CSS
+                br
+                |CoffeeScript pour le Javascript
 
-          .row
-            p Hello World
-            |Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            |Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-          .row
-             button.btn.btn-success#get-metrics Get
-
-          .row
-             section#bloc_metrics
-                table#tab-metrics(border="1").col-lg-3
-                svg#graph.col-lg-9
+            section.col-lg-2
 
           .row
-             form.form-inline#save(action='metric/1.json',method='post')
-               input(type='text',name='timestamp', class='form-control', placeholder="Param1")
-               input(type='text',name='value', class='form-control', placeholder="Param2")
-               input(type='submit', name='submit',class='form-control btn btn-primary',value='Save')
 
-            #content
+            section#img_technos
+              .row
+                figure.col-sm-4.col-md-4.col-lg-3
+                  img(src='./img/nodejs.png',alt='NodeJS',title='NodeJS')
+                  figcaption NodeJS
+
+                figure.col-sm-4.col-md-4.col-lg-3
+                  img(src='./img/coffeescript.png',alt='CoffeeScript',title='CoffeeScript')
+                  figcaption CoffeeScript
+
+                figure.col-sm-4.col-md-4.col-lg-3
+                  img(src='./img/jade.png',alt='Jade',title='Jade')
+                  figcaption Jade
+
+                figure.col-sm-4.col-md-4.col-lg-3
+                  img(src='./img/stylus.png',alt='Stylus',title='Stylus')
+                  figcaption Stylus
+
+                div.col-lg-3
+
+                figure.col-sm-4.col-md-4.col-lg-3
+                  img(src='./img/bootstrap.png',alt='Stylus',title='Bootstrap')
+                  figcaption Bootstrap
+
+                figure.col-sm-4.col-md-4.col-lg-3
+                  img(src='./img/jquery.png',alt='Stylus',title='jQuery')
+                  figcaption jQuery
+
+                div.col-lg-3

@@ -11,7 +11,7 @@
     ------
     Returns some hard coded metrics
      */
-    get: function() {
+    get: function(callback) {
       return [
         {
           timestamp: new Date('2015-12-01 10:30 UTC').getTime(),
@@ -36,7 +36,10 @@
           value: 22
         }, {
           timestamp: new Date('2015-12-01 11:15 UTC').getTime(),
-          value: 25
+          value: 26
+        }, {
+          timestamp: new Date('2015-12-01 11:30 UTC').getTime(),
+          value: 27
         }
       ];
 
@@ -56,11 +59,6 @@
       
       rs.on 'end', () ->
           console.log "#{key} : #{value}"
-      
-      return [
-         key : "#{key}",
-         value : "#{value}"
-      ]
        */
     },
 

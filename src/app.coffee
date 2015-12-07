@@ -1,13 +1,8 @@
-met = [
-    {
-      timestamp: 3,
-      value: 27
-    }
-]
-
 express = require 'express'
 jade = require 'jade'
 metrics = require './metrics'
+users = require './users'
+
 #stylus = require 'stylus'
 app = express()
 
@@ -44,14 +39,6 @@ app.get 'metrics.json', (req,res) ->
   res.json metrics.get()
 ###
 
-##app.get '/hello/:name'##
-
-
-app.post 'metric/:id.json', (req,res) ->
-  metric.save req.param.id req.body, (err) ->
-    if err then res.status(500).json err
-    res.status(200).send "Matrics saved"
-
 app.use require('body-parser')()
 app.get '/',(req,res) ->
   res.render 'index'
@@ -61,13 +48,22 @@ app.get '/',(req,res) ->
 app.get '/metrics.json', (req, res) ->
   res.status(200).json metrics.get()
 
-app.get '/hello/:name', (req, res) ->
-  res.status(200).send req.params.name
+app.get '/users.json', (req,res) ->
+  res.status(200).json users.get()
+
+ app.get '/user', (req,res) ->
+   res.render 'user'
 
 app.post '/metric/:id.json', (req, res) ->
   metrics.save req.params.id, met, (err) ->
     if err then res.status(500).json err
     else res.status(200).send "Metrics saved"
+
+app.post '/', (req,res) ->
+  if users.login(req.body.login,req.body.password)
+    res.redirect '/user'
+  else
+    res.redirect '/'
 
  app.listen app.get('port'),(req,res) ->
   console.log "Server started"

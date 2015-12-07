@@ -1,10 +1,32 @@
 $(document).ready ->
-
   $("#bloc_metrics").hide();
+  $('#save').hide()
+
+  #Login
+  ###
+  $('#submit_login').click ->
+    $.postJSON '/', ->
+    login = $("input[name='login']").val()
+    password = $("input[name='password']").val()
+    i=0
+    $.getJSON '/users.json', (data) ->
+      for users in data
+        if login == "#{users.user}" && password == "#{users.password}"
+          i++
+
+    if i == 1
+      return true
+    else
+      return false
+  ###
+  $('#save-metrics').click ->
+     $('#save').toggle()
+
   $('#get-metrics').click ->
 
       $.getJSON '/metrics.json', (data) ->
           $('#tab-metrics').empty()
+          $('#bloc_metrics svg').empty()
           entete = "<th>Key</th>"
           entete += "<th>Value</th>"
           $('#tab-metrics').append(entete)
@@ -38,28 +60,10 @@ $(document).ready ->
              #return i * (w / dataset.length - barPadding)
              return i * (w / 15 - barPadding)
           .attr "height", (d) ->
-             return d *4
+             return d *8
           .attr "y", (d) ->
              return h - d*4
           .attr "fill", (d) ->
              return "rgb(0, " + (d * 10) + ",0)"
 
            $('#bloc_metrics').toggle()
-
-
-          ###
-         svg.selectAll "text"
-        .data dataset
-        .enter()
-        .append "text"
-        .text (d) ->
-          return d
-        .attr "x", (d, i) ->
-           return i * (w / dataset.length) + (w / dataset.length - barPadding)/ 2
-        .attr "y", (d) ->
-          return h - (d * 4) + 14
-        .attr "text-anchor", "middle"
-        .attr "font-family", "sans-serif"
-        .attr "font-size", "11px"
-        .attr "fill", "white"
-         ###

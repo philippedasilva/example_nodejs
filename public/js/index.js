@@ -2,10 +2,32 @@
 (function() {
   $(document).ready(function() {
     $("#bloc_metrics").hide();
+    $('#save').hide();
+
+    /*
+    $('#submit_login').click ->
+      $.postJSON '/', ->
+      login = $("input[name='login']").val()
+      password = $("input[name='password']").val()
+      i=0
+      $.getJSON '/users.json', (data) ->
+        for users in data
+          if login == "#{users.user}" && password == "#{users.password}"
+            i++
+    
+      if i == 1
+        return true
+      else
+        return false
+     */
+    $('#save-metrics').click(function() {
+      return $('#save').toggle();
+    });
     return $('#get-metrics').click(function() {
       return $.getJSON('/metrics.json', function(data) {
         var barPadding, dataset, entete, h, i, j, len, metric, svg, w;
         $('#tab-metrics').empty();
+        $('#bloc_metrics svg').empty();
         entete = "<th>Key</th>";
         entete += "<th>Value</th>";
         $('#tab-metrics').append(entete);
@@ -26,7 +48,7 @@
         svg.selectAll("rect").data(dataset).enter().append("rect").attr("x", 0).attr("width", 20).attr("x", function(d, i) {
           return i * (w / 15 - barPadding);
         }).attr("height", function(d) {
-          return d * 4;
+          return d * 8;
         }).attr("y", function(d) {
           return h - d * 4;
         }).attr("fill", function(d) {
@@ -34,23 +56,6 @@
         });
         return $('#bloc_metrics').toggle();
       });
-
-      /*
-               svg.selectAll "text"
-              .data dataset
-              .enter()
-              .append "text"
-              .text (d) ->
-      return d
-              .attr "x", (d, i) ->
-       return i * (w / dataset.length) + (w / dataset.length - barPadding)/ 2
-              .attr "y", (d) ->
-      return h - (d * 4) + 14
-              .attr "text-anchor", "middle"
-              .attr "font-family", "sans-serif"
-              .attr "font-size", "11px"
-              .attr "fill", "white"
-       */
     });
   });
 

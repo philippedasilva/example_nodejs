@@ -2,8 +2,23 @@ doctype html
 
 head
   block head
+  link(rel="stylesheet",href="/css/bootstrap.min.css")
+  link(rel="stylesheet",href="/css/index.css")
+  script(src="/js/jquery.min.js")
+  script(src="/js/bootstrap.min.js")
+  script(src="/js/d3.min.js")
+  script(src="/js/graph.js")
+  script(src="/js/index.js")
 
 body
-  block content
-  block foot
-    #footer
+  div.container
+     header
+       h1 TP Asynchronous Server Technologies
+
+     main
+      .row
+          div#content
+             block content
+
+      footer
+          p Copyright: Producted by Philippe DA SILVA (ECE Paris)
