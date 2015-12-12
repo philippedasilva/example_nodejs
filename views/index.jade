@@ -6,8 +6,32 @@ block head
 block content
     div.container
         main
+
          .row
-             form.form-inline#login(action='/',method='post')
+          button.btn.btn-success#btn_inscrire.col-lg-4.col-md-4.col-sm-5.col-xs-5 Sign Up
+          button.btn.btn-sucess#btn_login.col-lg-4.col-md-4.col-sm-5.col-xs-5 Sign In
+
+         .row
+            form.form#inscrire(action='/inscrire',method='post')
+              label(for='username_inscrire') Username
+              input(type='text', name='username_inscrire', class='form-control', placeholder="Votre login (ex: root)")
+
+              label(for='name_inscrire') Name
+              input(type='text', name='name_inscrire', class='form-control', placeholder="Votre nom (ex: Phil)")
+
+              label(for='email_inscrire') Email
+              input(type='text', name='email_inscrire', class='form-control', placeholder="Votre email (ex: test@test.fr)")
+
+              label(for='password_inscrire') Password
+              input(type='password', name='password_inscrire',class='form-control', placeholder="Mot de passe (ex: root)")
+
+              label(for='password2_inscrire') Password (retapez-le)
+              input(type='password', name='password2_inscrire',class='form-control', placeholder="Mot de passe (ex: root)")
+
+              input(type='submit', name='submit',class='form-control btn btn-primary',id='create_login',value='Create')
+
+         .row
+             form.form-inline#login(action='/login',method='post')
                label(for='login') Login
                input(type='text', name='login', class='form-control', placeholder="Votre login (ex: root)")
                label(for='password') Password
@@ -51,8 +75,8 @@ block content
                   figcaption Jade
 
                 figure.col-sm-4.col-md-4.col-lg-3
-                  img(src='./img/stylus.png',alt='Stylus',title='Stylus')
-                  figcaption Stylus
+                  img(src='./img/jquery.png',alt='Stylus',title='jQuery')
+                  figcaption jQuery
 
                 div.col-lg-3
 
@@ -61,7 +85,7 @@ block content
                   figcaption Bootstrap
 
                 figure.col-sm-4.col-md-4.col-lg-3
-                  img(src='./img/jquery.png',alt='Stylus',title='jQuery')
-                  figcaption jQuery
+                  img(src='./img/stylus.png',alt='Stylus',title='Stylus')
+                  figcaption Stylus
 
                 div.col-lg-3

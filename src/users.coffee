@@ -1,4 +1,4 @@
-#db = require('./db') "#{__dirname}/../db/users"
+db = require('./db') "#{__dirname}/../db/users"
 
 module.exports =
   ###
@@ -7,44 +7,30 @@ module.exports =
   Returns some hard coded metrics
   ###
 
-  get: () ->
-    return [
-      user: "root",
-      password: "root"
-    ,
-      user: "phil",
-      password: "root"
-]
+  get: (username,callback) ->
+    user ={}
+    rs = db.createReadStream
+      gte: "user:#{username}"
+      lte: "user:#{username}"
+    rs.on 'data', (data) ->
+      [_,_username] = data.key.split ':'
+      [_name,_password,_email] = data.value.split '.'
+      user =
+        username: _username
+        name:_name
+        password: _password
+        email: _email
+    rs.on 'error',callback
+    rs.on 'close', ->
+      callback null, user
 
-  login: (login,password) ->
-    tab = this.get()
-    i=0
-    for users in tab
-      if login == "#{users.user}" && password == "#{users.password}"
-        i++
-
-    if i==1
-      return true
-    else
-      return false
-
-  ###
-  `save(id, metrics, cb)`
-  ------------------------
-  Save some metrics with a given id
-  Parameters:
-  `id`: An integer defining a batch of metrics
-  `metrics`: An array of objects with a timestamp and a value
-  `callback`: Callback function takes an error or null as parameter
-  ###
-
-  ###
-  save: (id, metrics, callback) ->
+  save: (username,password,name,email,callback) ->
     ws = db.createWriteStream()
     ws.on 'error', callback
     ws.on 'close', callback
-    for m in metrics
-      {timestamp, value} = m
-      ws.write key: "metric:#{id}:#{timestamp}", value: value
+    ws.write key: "user:#{username}", value: "#{name}.#{password}.#{email}"
     ws.end()
-  ###
+    #Forme de la clé user : user.#{username}
+    #Value : name.password.email
+
+  #remove:(username,callback) ->

@@ -10,6 +10,22 @@
 
   users = require('./users');
 
+
+  /*
+  app.use session
+     secret: 'Sec'
+     store: new LevelStore './db/sessions'
+     resave:true
+     saveUnintialized:true
+   */
+
+
+  /*
+  router = express.Router()
+  router.get '/users', (req,res) ->
+  app.use '/api',router
+   */
+
   app = express();
 
   app.set('port', 1889);
@@ -53,24 +69,51 @@
 
   app.use(require('body-parser')());
 
+
+  /*
+  authCheck = (req,res,next) ->
+    unless req.session.loggedIn == true
+    res.redirect '/login'
+    else
+      next()
+  
+  
+  app.get '/',authCheck,(req,res) ->
+    res.render 'index', name:req.session.username
+   */
+
   app.get('/', function(req, res) {
     return res.render('index');
   });
 
   app.get('/metrics.json', function(req, res) {
-    return res.status(200).json(metrics.get());
+    return metrics.get(1, function(err, data) {
+      return res.status(200).json(data[0]);
+    });
   });
 
   app.get('/users.json', function(req, res) {
-    return res.status(200).json(users.get());
+    return users.get("rooter", function(err, data) {
+      if (err) {
+        throw err;
+      }
+      return res.status(200).json(data);
+    });
   });
 
   app.get('/user', function(req, res) {
     return res.render('user');
   });
 
-  app.post('/metric/:id.json', function(req, res) {
-    return metrics.save(req.params.id, met, function(err) {
+  app.post('/metric/save.json', function(req, res) {
+    var met;
+    met = [
+      {
+        timestamp: req.body.timestamp,
+        value: req.body.value
+      }
+    ];
+    return metrics.save(req.body.id, met, function(err) {
       if (err) {
         return res.status(500).json(err);
       } else {
@@ -79,12 +122,31 @@
     });
   });
 
-  app.post('/', function(req, res) {
-    if (users.login(req.body.login, req.body.password)) {
-      return res.redirect('/user');
-    } else {
-      return res.redirect('/');
-    }
+  app.post('/login', function(req, res) {
+    var password, username;
+    username = req.body.login;
+    password = req.body.password;
+    return users.get(username, function(err, data) {
+      if (err) {
+        return res.status(200).send("Authentifacation failed (username introuvable en bdd)");
+      } else {
+        if (data.password === password) {
+          return res.status(200).send("Authentifacation réussie");
+        } else {
+          return res.status(200).send("Authentifacation failed (password incorrect)");
+        }
+      }
+    });
+  });
+
+  app.post('/inscrire', function(req, res) {
+    return users.save(req.body.username_inscrire, req.body.password_inscrire, req.body.name_inscrire, req.body.email_inscrire, function(err) {
+      if (err) {
+        return res.status(500).json(err);
+      } else {
+        return res.redirect('/user');
+      }
+    });
   });
 
   app.listen(app.get('port'), function(req, res) {

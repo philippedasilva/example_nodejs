@@ -7,6 +7,7 @@ module.exports =
   Returns some hard coded metrics
   ###
 
+  ###
   get: (callback) ->
     return [
       timestamp: new Date('2015-12-01 10:30 UTC').getTime(),
@@ -35,10 +36,26 @@ module.exports =
     ,
       timestamp: new Date('2015-12-01 11:30 UTC').getTime(),
       value: 27
-]
+]###
 
-
-    ###
+  get: (id,callback) ->
+    metrics = []
+    i=0
+    rs = db.createReadStream()
+    rs.on 'data', (data) ->
+        #gte: "id:#{id}"
+        [_, _id, _timestamp] = data.key.split ':'
+        #metrics.push id: id, timestamp: timestamp, value: value
+        #metrics.push id: _id, timestamp: _timestamp, value: data.value
+        metrics[i] =
+          id: _id,
+          timestamp:_timestamp,
+          value: data.value
+        i++
+    rs.on 'error', callback
+    rs.on 'close', ->
+      callback null, metrics
+  ###
     rs = db.createReadStream()
     key = ''
     value= ''
@@ -54,7 +71,7 @@ module.exports =
 
     rs.on 'end', () ->
         console.log "#{key} : #{value}"
-    ###
+  ###
 
   ###
   `save(id, metrics, cb)`

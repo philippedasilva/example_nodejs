@@ -35,7 +35,8 @@ block content
                      div.col-lg-1.col-md-1.col-sm-1.col-xs-1
 
                 .row
-                  form.form-inline#save(action='metric/1.json',method='post')
+                  form.form-inline#save(action='metric/save.json',method='post')
+                    input(type='text',name='id', class='form-control', placeholder="ID")
                     input(type='text',name='timestamp', class='form-control', placeholder="Param1")
                     input(type='text',name='value', class='form-control', placeholder="Param2")
                     input(type='submit', name='submit',class='form-control btn btn-primary',value='Save')

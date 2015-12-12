@@ -11,39 +11,60 @@
     ------
     Returns some hard coded metrics
      */
-    get: function(callback) {
-      return [
-        {
-          timestamp: new Date('2015-12-01 10:30 UTC').getTime(),
-          value: 26
-        }, {
-          timestamp: new Date('2015-12-01 10:35 UTC').getTime(),
-          value: 23
-        }, {
-          timestamp: new Date('2015-12-01 10:40 UTC').getTime(),
-          value: 20
-        }, {
-          timestamp: new Date('2015-12-01 10:45 UTC').getTime(),
-          value: 19
-        }, {
-          timestamp: new Date('2015-12-01 10:50 UTC').getTime(),
-          value: 18
-        }, {
-          timestamp: new Date('2015-12-01 10:55 UTC').getTime(),
-          value: 20
-        }, {
-          timestamp: new Date('2015-12-01 11:00 UTC').getTime(),
-          value: 22
-        }, {
-          timestamp: new Date('2015-12-01 11:15 UTC').getTime(),
-          value: 26
-        }, {
-          timestamp: new Date('2015-12-01 11:30 UTC').getTime(),
-          value: 27
-        }
-      ];
 
-      /*
+    /*
+    get: (callback) ->
+      return [
+        timestamp: new Date('2015-12-01 10:30 UTC').getTime(),
+        value: 26
+      ,
+        timestamp: new Date('2015-12-01 10:35 UTC').getTime(),
+        value: 23
+      ,
+        timestamp: new Date('2015-12-01 10:40 UTC').getTime(),
+        value: 20
+      ,
+        timestamp: new Date('2015-12-01 10:45 UTC').getTime(),
+        value: 19
+      ,
+        timestamp: new Date('2015-12-01 10:50 UTC').getTime(),
+        value: 18
+      ,
+        timestamp: new Date('2015-12-01 10:55 UTC').getTime(),
+        value: 20
+      ,
+        timestamp: new Date('2015-12-01 11:00 UTC').getTime(),
+        value: 22
+      ,
+        timestamp: new Date('2015-12-01 11:15 UTC').getTime(),
+        value: 26
+      ,
+        timestamp: new Date('2015-12-01 11:30 UTC').getTime(),
+        value: 27
+    ]
+     */
+    get: function(id, callback) {
+      var i, metrics, rs;
+      metrics = [];
+      i = 0;
+      rs = db.createReadStream();
+      rs.on('data', function(data) {
+        var _, _id, _timestamp, ref;
+        ref = data.key.split(':'), _ = ref[0], _id = ref[1], _timestamp = ref[2];
+        metrics[i] = {
+          id: _id,
+          timestamp: _timestamp,
+          value: data.value
+        };
+        return i++;
+      });
+      rs.on('error', callback);
+      return rs.on('close', function() {
+        return callback(null, metrics);
+      });
+    },
+
+    /*
       rs = db.createReadStream()
       key = ''
       value= ''
@@ -53,14 +74,13 @@
           value += chunk.value
           #console.log data.key, " = ",data.value
           #d = "#{data.key} = #{data.value};"
-      
+    
       rs.on 'error', (err) ->
         if err then throw err
-      
+    
       rs.on 'end', () ->
           console.log "#{key} : #{value}"
-       */
-    },
+     */
 
     /*
     `save(id, metrics, cb)`
@@ -72,12 +92,12 @@
     `callback`: Callback function takes an error or null as parameter
      */
     save: function(id, metrics, callback) {
-      var i, len, m, timestamp, value, ws;
+      var j, len, m, timestamp, value, ws;
       ws = db.createWriteStream();
       ws.on('error', callback);
       ws.on('close', callback);
-      for (i = 0, len = metrics.length; i < len; i++) {
-        m = metrics[i];
+      for (j = 0, len = metrics.length; j < len; j++) {
+        m = metrics[j];
         timestamp = m.timestamp, value = m.value;
         ws.write({
           key: "metric:" + id + ":" + timestamp,

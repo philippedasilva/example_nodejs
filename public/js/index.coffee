@@ -1,7 +1,16 @@
 $(document).ready ->
-  $("#bloc_metrics").hide();
+  $('#inscrire').hide()
+  $('#login').hide()
+  $("#bloc_metrics").hide()
   $('#save').hide()
 
+  $('#btn_inscrire').click ->
+    $('#login').hide()
+    $('#inscrire').toggle()
+
+  $('#btn_login').click ->
+    $('#inscrire').hide()
+    $('#login').toggle()
   #Login
   ###
   $('#submit_login').click ->
