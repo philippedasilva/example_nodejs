@@ -24,53 +24,36 @@ app.use session
    resave:true
    saveUnintialized:true
 
-###
-app.use morgan 'dev'
-
-app.get '/myroute',middleware, (req,res) ->
-  #route logic
-router = express.Router()
-router.get '/users', (req,res) ->
-app.use '/api',router
-###
-
-###
-app.use stylus.middleware(
-  src: __dirname + '/../public'
-  dest: __dirname + '/../public'
-  debug: true
-  force: true)
-###
-
 app.use require('body-parser')()
 
+###
 app.get '/', (req,res)->
   res.render 'index'
 
 app.get '/user',(req,res) ->
   res.render 'user'
-
-
+###
 # -----------------------------------------
+
+#Si user non loggé alors renvoie sur page daccueil sinon page user (inverse)
+authCheckHome = (req,res,next) ->
+  if req.session.loggedIn == true
+    res.redirect '/user'
+  else
+    next()
+
+app.get '/',authCheckHome,(req,res) ->
+  res.render 'index'
 
 #Si user loggé alors on le renvoie sur page user sinon page daccueil
 authCheckUser = (req,res,next) ->
-  unless req.session.loggedIn == false
+  if req.session.loggedIn == undefined
     res.redirect '/'
-  else
-    next()
-#Si user non loggé alors renvoie sur page daccueil sinon page user (inverse)
-authCheckHome = (req,res,next) ->
-  unless req.session.loggedIn == true
-    res.redirect '/user'
   else
     next()
 
 app.get '/user',authCheckUser,(req,res) ->
   res.render 'user', name:req.session.username
-
-app.get '/',authCheckHome,(req,res) ->
-  res.render 'index'
 
 # -------------------------------------------
 
@@ -127,7 +110,7 @@ app.get '/session', (req,res) ->
   if req.session.loggedIn == true
     logged = "LoggedIn = true"
   else
-    logged = "LoggedOut = false"
+    logged = "LoggedIn = false"
   loguser = req.session.username
   res.status(200).send logged + '\n' + loguser
 

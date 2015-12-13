@@ -38,47 +38,32 @@
     saveUnintialized: true
   }));
 
-
-  /*
-  app.use morgan 'dev'
-  
-  app.get '/myroute',middleware, (req,res) ->
-    #route logic
-  router = express.Router()
-  router.get '/users', (req,res) ->
-  app.use '/api',router
-   */
-
-
-  /*
-  app.use stylus.middleware(
-    src: __dirname + '/../public'
-    dest: __dirname + '/../public'
-    debug: true
-    force: true)
-   */
-
   app.use(require('body-parser')());
 
-  app.get('/', function(req, res) {
-    return res.render('index');
-  });
 
-  app.get('/user', function(req, res) {
-    return res.render('user');
-  });
+  /*
+  app.get '/', (req,res)->
+    res.render 'index'
+  
+  app.get '/user',(req,res) ->
+    res.render 'user'
+   */
 
-  authCheckUser = function(req, res, next) {
-    if (req.session.loggedIn !== false) {
-      return res.redirect('/');
+  authCheckHome = function(req, res, next) {
+    if (req.session.loggedIn === true) {
+      return res.redirect('/user');
     } else {
       return next();
     }
   };
 
-  authCheckHome = function(req, res, next) {
-    if (req.session.loggedIn !== true) {
-      return res.redirect('/user');
+  app.get('/', authCheckHome, function(req, res) {
+    return res.render('index');
+  });
+
+  authCheckUser = function(req, res, next) {
+    if (req.session.loggedIn === void 0) {
+      return res.redirect('/');
     } else {
       return next();
     }
@@ -88,10 +73,6 @@
     return res.render('user', {
       name: req.session.username
     });
-  });
-
-  app.get('/', authCheckHome, function(req, res) {
-    return res.render('index');
   });
 
   app.get('/metrics.json', function(req, res) {
@@ -167,7 +148,7 @@
     if (req.session.loggedIn === true) {
       logged = "LoggedIn = true";
     } else {
-      logged = "LoggedOut = false";
+      logged = "LoggedIn = false";
     }
     loguser = req.session.username;
     return res.status(200).send(logged + '\n' + loguser);
