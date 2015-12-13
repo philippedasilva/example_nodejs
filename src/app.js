@@ -92,9 +92,9 @@
     });
   });
 
-  app.get('/metrics_users', function(req, res) {
+  app.get('/metrics_users.json', function(req, res) {
     return metrics_users.get("root", function(err, data) {
-      return res.status(200).send(data);
+      return res.status(200).json(data);
     });
   });
 
@@ -145,7 +145,7 @@
         return res.redirect('/');
       } else {
         req.session.loggedIn = true;
-        req.session.username = data.username;
+        req.session.username = username;
         return res.redirect('/user');
       }
     });
@@ -161,9 +161,9 @@
     var logged, loguser;
     if (req.session.loggedIn === true) {
       logged = "LoggedIn = true";
+      loguser = req.session.username;
     } else {
       logged = "LoggedIn = false";
-      loguser = req.session.username;
     }
     return res.status(200).send(logged + '\n' + loguser);
   });

@@ -67,9 +67,9 @@ app.get '/metrics.json', (req, res) ->
   metrics.get 1, (err, data) ->
     res.status(200).send data
 
-app.get '/metrics_users',(req,res) ->
-  metrics_users.get "root", (err,data) ->
-    res.status(200).send data
+app.get '/metrics_users.json', (req,res) ->
+  metrics_users.get "root", (err, data) ->
+    res.status(200).json data
 
 app.post '/metric/save.json', (req, res) ->
   met=[
@@ -96,14 +96,14 @@ app.post '/inscrire', (req,res) ->
 app.post '/login', (req,res) ->
   username = req.body.login
   password = req.body.password
-  users.get username, (err,data) ->
+  users.get username, (err, data) ->
     if err
       res.status(200).send "Authentifacation failed (username introuvable en bdd)"
     unless data.password == password
       res.redirect '/'
     else
       req.session.loggedIn = true
-      req.session.username = data.username
+      req.session.username = username
       res.redirect '/user'
 
 #Deconnexion (suppression de la session en cours)
@@ -116,9 +116,9 @@ app.post '/disconnect', (req,res) ->
 app.get '/session', (req,res) ->
   if req.session.loggedIn == true
     logged = "LoggedIn = true"
+    loguser = req.session.username
   else
     logged = "LoggedIn = false"
-    loguser = req.session.username
   res.status(200).send logged + '\n' + loguser
 
 #Ecouter sur le port n°1889 (defini en param)
