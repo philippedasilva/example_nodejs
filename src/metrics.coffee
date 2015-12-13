@@ -11,15 +11,16 @@ module.exports =
     metrics = []
     i=0
     rs = db.createReadStream()
+      #gte: "metric:#{id}"
+      #lte: "metric:#{id}"
     rs.on 'data', (data) ->
-      #gte: "id:#{id}"
-      [_, _id, _timestamp] = data.key.split ':'
-      #metrics.push id: id, timestamp: timestamp, value: value
-      #metrics.push id: _id, timestamp: _timestamp, value: data.value
+      [_, _id] = data.key.split ':'
+      [_timestamp,_value] = data.value.split ':'
+
       metrics[i] =
         id: _id,
         timestamp:_timestamp,
-        value: data.value
+        value: _value
       i++
     rs.on 'error', callback
     rs.on 'close', ->
@@ -41,5 +42,5 @@ module.exports =
     ws.on 'close', callback
     for m in metrics
       {timestamp, value} = m
-      ws.write key: "metric:#{id}:#{timestamp}", value: value
+      ws.write key: "metric:#{id}", value: "#{timestamp}:#{value}"
     ws.end()

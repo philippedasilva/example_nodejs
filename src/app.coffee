@@ -59,17 +59,39 @@ app.get '/user',authCheckUser,(req,res) ->
 # -------------------------------------------
 
 app.get '/users.json', (req,res) ->
-  users.get "root", (err,data) ->
+  users.get "root2", (err,data) ->
     if err then throw err
-    res.status(200).json data
+    res.status(200).send data
 
 app.get '/metrics.json', (req, res) ->
   metrics.get 1, (err, data) ->
     res.status(200).send data
 
 app.get '/metrics_users.json', (req,res) ->
-  metrics_users.get "root", (err, data) ->
-    res.status(200).json data
+  if req.session.loggedIn == undefined
+    res.status(200).send "Non loggé"
+  else
+    metrics_users.get req.session.username, (err,data) ->
+      res.status(200).send data
+    #res.status(200).send req.session.username
+
+app.get '/metricsbyuser.json', (req,res) ->
+  if req.session.loggedIn == undefined
+    res.status(200).send "Non loggé"
+  else
+    tab = []
+    i=0
+    j=0
+    metrics_users.get req.session.username, (err,data) ->
+      metrics.get 1, (err,met) ->
+        for d in data
+          for m in met
+            if d.id_metric == m.id
+              tab[i] = m
+          i++
+
+        res.status(200).send tab
+
 
 app.post '/metric/save.json', (req, res) ->
   met=[

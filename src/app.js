@@ -78,11 +78,11 @@
   });
 
   app.get('/users.json', function(req, res) {
-    return users.get("root", function(err, data) {
+    return users.get("root2", function(err, data) {
       if (err) {
         throw err;
       }
-      return res.status(200).json(data);
+      return res.status(200).send(data);
     });
   });
 
@@ -93,9 +93,49 @@
   });
 
   app.get('/metrics_users.json', function(req, res) {
-    return metrics_users.get("root", function(err, data) {
-      return res.status(200).json(data);
-    });
+    if (req.session.loggedIn === void 0) {
+      return res.status(200).send("Non loggé");
+    } else {
+      return metrics_users.get(req.session.username, function(err, data) {
+        return res.status(200).send(data);
+      });
+    }
+  });
+
+  app.get('/metricsbyuser.json', function(req, res) {
+    var i, j, tab;
+    if (req.session.loggedIn === void 0) {
+      return res.status(200).send("Non loggé");
+    } else {
+      tab = [];
+      i = 0;
+      j = 0;
+      return metrics_users.get(req.session.username, function(err, data) {
+
+        /*
+          metrics.get d.id_metric, (err,met) ->
+            tab[i] =
+              username : req.session.username,
+              id_metric: met.id,
+              timestamp: met.timestamp,
+              value: met.value
+         */
+        return metrics.get(1, function(err, met) {
+          var d, k, l, len, len1, m;
+          for (k = 0, len = data.length; k < len; k++) {
+            d = data[k];
+            for (l = 0, len1 = met.length; l < len1; l++) {
+              m = met[l];
+              if (d.id_metric === m.id) {
+                tab[i] = m;
+              }
+            }
+            i++;
+          }
+          return res.status(200).send(tab);
+        });
+      });
+    }
   });
 
   app.post('/metric/save.json', function(req, res) {

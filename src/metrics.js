@@ -17,12 +17,13 @@
       i = 0;
       rs = db.createReadStream();
       rs.on('data', function(data) {
-        var _, _id, _timestamp, ref;
-        ref = data.key.split(':'), _ = ref[0], _id = ref[1], _timestamp = ref[2];
+        var _, _id, _timestamp, _value, ref, ref1;
+        ref = data.key.split(':'), _ = ref[0], _id = ref[1];
+        ref1 = data.value.split(':'), _timestamp = ref1[0], _value = ref1[1];
         metrics[i] = {
           id: _id,
           timestamp: _timestamp,
-          value: data.value
+          value: _value
         };
         return i++;
       });
@@ -50,8 +51,8 @@
         m = metrics[j];
         timestamp = m.timestamp, value = m.value;
         ws.write({
-          key: "metric:" + id + ":" + timestamp,
-          value: value
+          key: "metric:" + id,
+          value: timestamp + ":" + value
         });
       }
       return ws.end();

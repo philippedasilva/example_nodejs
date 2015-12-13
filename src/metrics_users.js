@@ -19,12 +19,14 @@
       rs.on('data', function(data) {
         var _, _id_metric, _username, ref;
         ref = data.key.split(':'), _ = ref[0], _username = ref[1], _id_metric = ref[2];
-        metrics_users[i] = {
-          username: _username,
-          id_metric: _id_metric,
-          value: data.value
-        };
-        return i++;
+        if (_username === username) {
+          metrics_users[i] = {
+            username: _username,
+            id_metric: _id_metric,
+            value: data.value
+          };
+          return i++;
+        }
       });
       rs.on('error', callback);
       return rs.on('close', function() {

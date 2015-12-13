@@ -11,13 +11,13 @@ module.exports =
     i=0
     rs = db.createReadStream()
     rs.on 'data', (data) ->
-      #gte: "metrics_users:#{username}"
       [_, _username,_id_metric] = data.key.split ':'
-      metrics_users[i] =
-        username: _username,
-        id_metric: _id_metric
-        value: data.value
-      i++
+      if _username == username
+        metrics_users[i] =
+          username: _username,
+          id_metric: _id_metric,
+          value: data.value
+        i++
     rs.on 'error', callback
     rs.on 'close', ->
       callback null, metrics_users
