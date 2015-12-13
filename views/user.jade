@@ -1,44 +1,50 @@
 extend layout
 
 block content
-    div.container
-        main
+  div.container
+    main
+      .row
+        div.col-lg-2
+        div#page_user.col-lg-8
           .row
-             div.col-lg-2
-             div#page_user.col-lg-8
-                .row
-                   section#connected
-                     h3 User Page
-                     h4 Connecté en tant que ...
+            section#connected
+              h3 User Page
+              h4 Connecté en tant que ...
 
-                .row
-                   section#presentation
-                     p
-                     |Dans cette partie propre à chaque utilisateur on pourra :
-                     br
-                     |Stocker des metrics
-                     br
-                     |Afficher les metrics sous forme numérique et graphique
+          .row
+            section#deconnexion
+              div.col-lg-5.col-md-5.col-sm-4.col-xs-4
+              form.form.col-lg-2.col-md-2.col-sm-4.col-xs-4(action='/disconnect',method='post')
+                input(type='submit', name='submit',class='form-control btn btn-danger',id='submit_login',value='Disconnect')
+              div.col-lg-5.col-md-5.col-sm-4.col-xs-4
+          .row
+            section#presentation
+              p
+                |Dans cette partie propre à chaque utilisateur on pourra :
+                br
+                |Stocker des metrics
+                br
+                |Afficher les metrics sous forme numérique et graphique
 
-                .row
-                  section#btns
-                     div.col-lg-2.col-md-2.col-sm-1.col-xs-1
-                     button.btn.btn-success#get-metrics.col-lg-4.col-md-4.col-sm-5.col-xs-5 Show Graph
-                     button.btn.btn-warning#save-metrics.col-lg-4.col-md-4.col-sm-5.col-xs-5 Save Metrics
-                     div.col-lg-2.col-md-2.col-sm-1.col-xs-1
-                .row
-                  section#bloc_metrics
-                     div.col-lg-1.col-md-1.col-sm-1.col-xs-1
-                     table#tab-metrics(border="1").col-lg-4.col-md-4.col-sm-4.col-xs-2
-                     div.col-lg-1.col-md-1.col-sm-1.col-xs-1
-                     svg#graph.col-lg-5.col-md-5.col-sm-5.col-xs-7
-                     div.col-lg-1.col-md-1.col-sm-1.col-xs-1
+          .row
+            section#btns
+              div.col-lg-2.col-md-2.col-sm-1.col-xs-1
+              button.btn.btn-success#get-metrics.col-lg-4.col-md-4.col-sm-5.col-xs-5 Show Graph
+              button.btn.btn-warning#save-metrics.col-lg-4.col-md-4.col-sm-5.col-xs-5 Save Metrics
+              div.col-lg-2.col-md-2.col-sm-1.col-xs-1
+          .row
+            section#bloc_metrics
+              div.col-lg-1.col-md-1.col-sm-1.col-xs-1
+              table#tab-metrics(border="1").col-lg-4.col-md-4.col-sm-4.col-xs-2
+              div.col-lg-1.col-md-1.col-sm-1.col-xs-1
+              svg#graph.col-lg-5.col-md-5.col-sm-5.col-xs-7
+              div.col-lg-1.col-md-1.col-sm-1.col-xs-1
 
-                .row
-                  form.form-inline#save(action='metric/save.json',method='post')
-                    input(type='text',name='id', class='form-control', placeholder="ID")
-                    input(type='text',name='timestamp', class='form-control', placeholder="Param1")
-                    input(type='text',name='value', class='form-control', placeholder="Param2")
-                    input(type='submit', name='submit',class='form-control btn btn-primary',value='Save')
+          .row
+            form.form-inline#save(action='metric/save.json',method='post')
+              input(type='text',name='id', class='form-control', placeholder="ID")
+              input(type='text',name='timestamp', class='form-control', placeholder="Param1")
+              input(type='text',name='value', class='form-control', placeholder="Param2")
+              input(type='submit', name='submit',class='form-control btn btn-primary',value='Save')
 
-              div.col-lg-2
+        div.col-lg-2

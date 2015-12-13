@@ -24,7 +24,6 @@ app.use session
    resave:true
    saveUnintialized:true
 
-
 ###
 app.use morgan 'dev'
 
@@ -41,21 +40,39 @@ app.use stylus.middleware(
   dest: __dirname + '/../public'
   debug: true
   force: true)
-
-authCheck = (req,res,next) ->
-  unless req.session.loggedIn == true
-  res.redirect '/login'
-  else
-    next()
-app.get '/',authCheck,(req,res) ->
-  res.render 'index', name:req.session.username
 ###
 
 app.use require('body-parser')()
-app.get '/',(req,res) ->
+
+app.get '/', (req,res)->
   res.render 'index'
-   #locals:
-     #title: 'Test Page'
+
+app.get '/user',(req,res) ->
+  res.render 'user'
+
+
+# -----------------------------------------
+
+#Si user loggé alors on le renvoie sur page user sinon page daccueil
+authCheckUser = (req,res,next) ->
+  unless req.session.loggedIn == false
+    res.redirect '/'
+  else
+    next()
+#Si user non loggé alors renvoie sur page daccueil sinon page user (inverse)
+authCheckHome = (req,res,next) ->
+  unless req.session.loggedIn == true
+    res.redirect '/user'
+  else
+    next()
+
+app.get '/user',authCheckUser,(req,res) ->
+  res.render 'user', name:req.session.username
+
+app.get '/',authCheckHome,(req,res) ->
+  res.render 'index'
+
+# -------------------------------------------
 
 app.get '/metrics.json', (req, res) ->
   metrics.get 1, (err, data) ->
@@ -65,9 +82,6 @@ app.get '/users.json', (req,res) ->
   users.get "root", (err,data) ->
     if err then throw err
     res.status(200).json data
-
- app.get '/user', (req,res) ->
-   res.render 'user'
 
 app.post '/metric/save.json', (req, res) ->
   met=[
@@ -79,22 +93,7 @@ app.post '/metric/save.json', (req, res) ->
     if err then res.status(500).json err
     else res.status(200).send "Metrics saved"
 
-app.post '/login', (req,res) ->
-
-  username = req.body.login
-  password = req.body.password
-  users.get username, (err,data) ->
-    if err
-      res.status(200).send "Authentifacation failed (username introuvable en bdd)"
-    unless data.password == password
-      #res.status(200).send "Authentifacation failed (password incorrect)"
-      res.redirect '/'
-    else
-      #res.status(200).send "Authentifacation réussie"
-      req.session.loggedIn = true
-      req.session.username = data.username
-      res.redirect '/user'
-
+#Inscription d'un user
 app.post '/inscrire', (req,res) ->
   users.save req.body.username_inscrire,req.body.password_inscrire,req.body.name_inscrire,req.body.email_inscrire, (err) ->
       if err then res.status(500).json err
@@ -103,19 +102,35 @@ app.post '/inscrire', (req,res) ->
         req.session.username = req.body.username_inscrire
         res.redirect '/user'
 
-app.get '/logout', (req,res) ->
+#Login User
+app.post '/login', (req,res) ->
+  username = req.body.login
+  password = req.body.password
+  users.get username, (err,data) ->
+    if err
+      res.status(200).send "Authentifacation failed (username introuvable en bdd)"
+    unless data.password == password
+      res.redirect '/'
+    else
+      req.session.loggedIn = true
+      req.session.username = data.username
+      res.redirect '/user'
+
+#Deconnexion (suppression de la session en cours)
+app.post '/disconnect', (req,res) ->
   delete req.session.loggedIn
   delete req.session.username
+  res.redirect '/'
 
+#Tester si session exist
 app.get '/session', (req,res) ->
   if req.session.loggedIn == true
     logged = "LoggedIn = true"
   else
     logged = "LoggedOut = false"
-
   loguser = req.session.username
   res.status(200).send logged + '\n' + loguser
 
+#Ecouter sur le port n°1889 (defini en param)
 app.listen app.get('port'),(req,res) ->
   console.log "Server started"
-###

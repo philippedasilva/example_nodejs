@@ -4,88 +4,105 @@ block head
   title DefaultPage
 
 block content
-    div.container
-        main
-
-         .row
-          button.btn.btn-success#btn_inscrire.col-lg-4.col-md-4.col-sm-5.col-xs-5 Sign Up
-          button.btn.btn-sucess#btn_login.col-lg-4.col-md-4.col-sm-5.col-xs-5 Sign In
-
-         .row
-            form.form#inscrire(action='/inscrire',method='post')
+  div.container
+    main
+      .row
+        div.col-lg-2.col-md-2.col-sm-1.col-xs-1
+        button.btn.btn-success#btn_inscrire.col-lg-4.col-md-4.col-sm-5.col-xs-5 Sign Up
+        button.btn.btn-sucess#btn_login.col-lg-4.col-md-4.col-sm-5.col-xs-5 Sign In
+        div.col-lg-2.col-md-2.col-sm-1.col-xs-1
+      .row
+        div.col-lg-3.col-md-3.col-sm-3.col-xs-2
+        form.form#inscrire.form-horizontal.col-lg-6.col-md-6.col-sm-6.col-xs-8(action='/inscrire',method='post')
+          div.form-group
+            div.col-lg-4.col-md-4.col-sm-4.col-xs-4
               label(for='username_inscrire') Username
+            div.col-lg-8.col-md-8.col-sm-8.col-xs-8
               input(type='text', name='username_inscrire', class='form-control', placeholder="Votre login (ex: root)")
 
+          div.form-group
+            div.col-lg-4.col-md-4.col-sm-4.col-xs-4
               label(for='name_inscrire') Name
+            div.col-lg-8.col-md-8.col-sm-8.col-xs-8
               input(type='text', name='name_inscrire', class='form-control', placeholder="Votre nom (ex: Phil)")
 
+          div.form-group
+            div.col-lg-4.col-md-4.col-sm-4.col-xs-4
               label(for='email_inscrire') Email
+            div.col-lg-8.col-md-8.col-sm-8.col-xs-8
               input(type='text', name='email_inscrire', class='form-control', placeholder="Votre email (ex: test@test.fr)")
 
+          div.form-group
+            div.col-lg-4.col-md-4.col-sm-4.col-xs-4
               label(for='password_inscrire') Password
+            div.col-lg-8.col-md-8.col-sm-8.col-xs-8
               input(type='password', name='password_inscrire',class='form-control', placeholder="Mot de passe (ex: root)")
 
+          div.form-group
+            div.col-lg-4.col-md-4.col-sm-4.col-xs-4
               label(for='password2_inscrire') Password (retapez-le)
+            div.col-lg-8.col-md-8.col-sm-8.col-xs-8
               input(type='password', name='password2_inscrire',class='form-control', placeholder="Mot de passe (ex: root)")
 
+          div.form-group
+            div.col-lg-4.col-md-4.col-sm-4.col-xs-4
+            div.col-lg-4.col-md-4.col-sm-4.col-xs-4
               input(type='submit', name='submit',class='form-control btn btn-primary',id='create_login',value='Create')
 
-         .row
-             form.form-inline#login(action='/login',method='post')
-               label(for='login') Login
-               input(type='text', name='login', class='form-control', placeholder="Votre login (ex: root)")
-               label(for='password') Password
-               input(type='password', name='password',class='form-control', placeholder="Mot de passe (ex: root)")
-               input(type='submit', name='submit',class='form-control btn btn-primary',id='submit_login',value='Connect')
+        div.col-lg-3.col-md-3.col-sm-3.col-xs-2
+      .row
+        form.form-inline#login(action='/login',method='post')
+          label(for='login') Login
+          input(type='text', name='login', class='form-control', placeholder="Votre login (ex: root)")
+          label(for='password') Password
+          input(type='password', name='password',class='form-control', placeholder="Mot de passe (ex: root)")
+          input(type='submit', name='submit',class='form-control btn btn-primary',id='submit_login',value='Connect')
+      .row
+        section.col-lg-2
+        section#apropos.col-lg-8
+          h3 But
+          p
+            |Cette interface permet à chaque utilisateur de déposer ses mesures et d'obtenir un graphe avec celles-ci.
+            br
+            |Conçu en NodeJS pour la partie Back-End avec le framework Express
+            br
+            |et utilisant des technos récentes de Front-End avec les compilateurs suivants:
+            br
+            br
+            |Jade pour le HTML
+            br
+            |Stylus pour le CSS
+            br
+            |CoffeeScript pour le Javascript
+        section.col-lg-2
+
+      .row
+        section#img_technos
           .row
-            section.col-lg-2
+            figure.col-sm-4.col-md-4.col-lg-3
+              img(src='./img/nodejs.png',alt='NodeJS',title='NodeJS')
+              figcaption NodeJS
 
-            section#apropos.col-lg-8
-              h3 But
-              p
-                |Cette interface permet à chaque utilisateur de déposer ses mesures et d'obtenir un graphe avec celles-ci.
-                br
-                |Conçu en NodeJS pour la partie Back-End avec le framework Express
-                br
-                |et utilisant des technos récentes de Front-End avec les compilateurs suivants:
-                br
-                br
-                |Jade pour le HTML
-                br
-                |Stylus pour le CSS
-                br
-                |CoffeeScript pour le Javascript
+            figure.col-sm-4.col-md-4.col-lg-3
+              img(src='./img/coffeescript.png',alt='CoffeeScript',title='CoffeeScript')
+              figcaption CoffeeScript
 
-            section.col-lg-2
+            figure.col-sm-4.col-md-4.col-lg-3
+              img(src='./img/jade.png',alt='Jade',title='Jade')
+              figcaption Jade
 
-          .row
+            figure.col-sm-4.col-md-4.col-lg-3
+              img(src='./img/jquery.png',alt='Stylus',title='jQuery')
+              figcaption jQuery
 
-            section#img_technos
-              .row
-                figure.col-sm-4.col-md-4.col-lg-3
-                  img(src='./img/nodejs.png',alt='NodeJS',title='NodeJS')
-                  figcaption NodeJS
+            div.col-lg-3
 
-                figure.col-sm-4.col-md-4.col-lg-3
-                  img(src='./img/coffeescript.png',alt='CoffeeScript',title='CoffeeScript')
-                  figcaption CoffeeScript
+            figure.col-sm-4.col-md-4.col-lg-3
+              img(src='./img/bootstrap.png',alt='Stylus',title='Bootstrap')
+              figcaption Bootstrap
 
-                figure.col-sm-4.col-md-4.col-lg-3
-                  img(src='./img/jade.png',alt='Jade',title='Jade')
-                  figcaption Jade
+            figure.col-sm-4.col-md-4.col-lg-3
+              img(src='./img/stylus.png',alt='Stylus',title='Stylus')
+              figcaption Stylus
 
-                figure.col-sm-4.col-md-4.col-lg-3
-                  img(src='./img/jquery.png',alt='Stylus',title='jQuery')
-                  figcaption jQuery
-
-                div.col-lg-3
-
-                figure.col-sm-4.col-md-4.col-lg-3
-                  img(src='./img/bootstrap.png',alt='Stylus',title='Bootstrap')
-                  figcaption Bootstrap
-
-                figure.col-sm-4.col-md-4.col-lg-3
-                  img(src='./img/stylus.png',alt='Stylus',title='Stylus')
-                  figcaption Stylus
-
-                div.col-lg-3
+            div.col-lg-3
