@@ -13,23 +13,6 @@
       $('#inscrire').hide();
       return $('#login').toggle();
     });
-
-    /*
-    $('#submit_login').click ->
-      $.postJSON '/', ->
-      login = $("input[name='login']").val()
-      password = $("input[name='password']").val()
-      i=0
-      $.getJSON '/users.json', (data) ->
-        for users in data
-          if login == "#{users.user}" && password == "#{users.password}"
-            i++
-    
-      if i == 1
-        return true
-      else
-        return false
-     */
     $('#save-metrics').click(function() {
       return $('#save').toggle();
     });
@@ -64,7 +47,9 @@
         }).attr("fill", function(d) {
           return "rgb(0, " + (d * 10) + ",0)";
         });
-        return $('#bloc_metrics').toggle();
+        if (data.length > 0) {
+          return $('#bloc_metrics').toggle();
+        }
       });
     });
   });

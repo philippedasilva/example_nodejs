@@ -30,7 +30,5 @@ module.exports =
     ws.on 'close', callback
     ws.write key: "user:#{username}", value: "#{name}.#{password}.#{email}"
     ws.end()
-    #Forme de la clé user : user.#{username}
-    #Value : name.password.email
 
   #remove:(username,callback) ->

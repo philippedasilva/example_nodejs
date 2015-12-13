@@ -3,6 +3,7 @@ jade = require 'jade'
 #stylus = require 'stylus'
 metrics = require './metrics'
 users = require './users'
+metrics_users = require './metrics_users'
 #morgan = require 'morgan'
 session = require 'express-session'
 LevelStore = require('level-session-store')(session)
@@ -20,7 +21,7 @@ app.use stylus.static
 ###
 app.use session
    secret: 'Sec'
-   store: new LevelStore './db/sessions'
+   store: new LevelStore "#{__dirname}/../db/sessions"
    resave:true
    saveUnintialized:true
 
@@ -57,24 +58,30 @@ app.get '/user',authCheckUser,(req,res) ->
 
 # -------------------------------------------
 
-app.get '/metrics.json', (req, res) ->
-  metrics.get 1, (err, data) ->
-    res.status(200).json data[0]
-
 app.get '/users.json', (req,res) ->
   users.get "root", (err,data) ->
     if err then throw err
     res.status(200).json data
+
+app.get '/metrics.json', (req, res) ->
+  metrics.get 1, (err, data) ->
+    res.status(200).send data
+
+app.get '/metrics_users',(req,res) ->
+  metrics_users.get "root", (err,data) ->
+    res.status(200).send data
 
 app.post '/metric/save.json', (req, res) ->
   met=[
     timestamp: req.body.timestamp,
     value: req.body.value
   ]
-
   metrics.save req.body.id, met, (err) ->
     if err then res.status(500).json err
-    else res.status(200).send "Metrics saved"
+    else
+      metrics_users.save req.session.username, req.body.id, (err) ->
+        if err then res.status(500).json err
+        else res.status(200).send "Metrics_users saved"
 
 #Inscription d'un user
 app.post '/inscrire', (req,res) ->
@@ -111,7 +118,7 @@ app.get '/session', (req,res) ->
     logged = "LoggedIn = true"
   else
     logged = "LoggedIn = false"
-  loguser = req.session.username
+    loguser = req.session.username
   res.status(200).send logged + '\n' + loguser
 
 #Ecouter sur le port n°1889 (defini en param)
