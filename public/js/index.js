@@ -36,7 +36,7 @@
           $('#tab-metrics').append("<tr></tr>");
           $('#tab-metrics tr:eq(' + i + ')').append("<td>" + metric.timestamp + "</td>");
           $('#tab-metrics tr:eq(' + i + ')').append("<td>" + metric.value + "</td>");
-          $('#tab-metrics tr:eq(' + i + ')').append("<button class='btn btn-danger btn_suppr' data-id='" + metric.id + "'>X</button>");
+          $('#tab-metrics tr:eq(' + i + ')').append("<td><button class='btn btn-danger btn_suppr' data-id='" + metric.id + "'>X</button></td>");
           i++;
         }
         w = 500;
@@ -52,6 +52,44 @@
         }).attr("fill", function(d) {
           return "rgb(0, " + (d * 10) + ",0)";
         });
+
+        /*
+        margin =
+        top: 10
+        right: 10
+        bottom: 15
+        left: 25
+        width = 480 - (margin.left) - (margin.right)
+        height = 250 - (margin.top) - (margin.bottom)
+        #parseDate = d3.time.format('%d-%b-%y').parse
+        x = d3.scale.linear().range([
+          0
+          width
+        ])
+        y = d3.scale.linear().range([
+          height
+          0
+        ])
+        xAxis = d3.svg.axis().scale(x).orient('bottom')
+        yAxis = d3.svg.axis().scale(y).orient('left')
+        line = d3.svg.line().x((m) ->
+          x m.timestamp
+        ).y((m) ->
+          y m.value
+        )
+        svg = d3.select('body').append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+        for metric in data
+          x.domain d3.extent(metric, (m) ->
+            m.timestamp
+          )
+          y.domain d3.extent(metric, (m) ->
+            m.value
+          )
+        svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')').call xAxis
+        svg.append('g').attr('class', 'y axis').call(yAxis).append('text').attr('transform', 'rotate(-90)').attr('y', 6).attr('dy', '.71em').style('text-anchor', 'end').text 'Price ($)'
+        svg.append('path').datum(data).attr('class', 'line').attr 'd', line
+        return
+         */
         if (data.length > 0) {
           return $('#bloc_metrics').toggle();
         }

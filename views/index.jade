@@ -3,13 +3,14 @@ extend layout
 block head
   title DefaultPage
 
-block content
-  div.container
+div.container
+  block content
     main
       .row
         div.col-lg-2.col-md-2.col-sm-1.col-xs-1
-        button.btn.btn-success#btn_inscrire.col-lg-4.col-md-4.col-sm-5.col-xs-5 Sign Up
-        button.btn.btn-sucess#btn_login.col-lg-4.col-md-4.col-sm-5.col-xs-5 Sign In
+        button.btn.btn-success#btn_inscrire.col-lg-3.col-md-3.col-sm-4.col-xs-4 Sign Up
+        div.col-lg-2.col-md-2.col-sm-2.col-xs-2
+        button.btn.btn-warning#btn_login.col-lg-3.col-md-3.col-sm-4.col-xs-4 Sign In
         div.col-lg-2.col-md-2.col-sm-1.col-xs-1
       .row
         div.col-lg-3.col-md-3.col-sm-3.col-xs-2

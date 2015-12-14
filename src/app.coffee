@@ -57,7 +57,7 @@ app.get '/user',authCheckUser,(req,res) ->
   res.render 'user'
 
 app.get '/username.json', (req,res) ->
-  res.status(200).json req.session.username  
+  res.status(200).json req.session.username
 
 # -------------------------------------------
 
@@ -146,6 +146,10 @@ app.get '/session', (req,res) ->
   else
     logged = "LoggedIn = false"
   res.status(200).send logged + '\n' + loguser
+
+#Supprimer une metric user
+app.post '/delete_metrics',(req,res) ->
+  res.status(200).send req.params
 
 #Ecouter sur le port n°1889 (defini en param)
 app.listen app.get('port'),(req,res) ->

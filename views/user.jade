@@ -1,7 +1,7 @@
 extend layout
 
-block content
-  div.container
+div.container
+  block content
     main
       .row
         div.col-lg-2
@@ -10,8 +10,7 @@ block content
             section#connected
               h3 User Page
               h4 Connecté en tant que :
-              p#username Username
-
+                span#username Username
           .row
             section#deconnexion
               div.col-lg-5.col-md-5.col-sm-4.col-xs-4
@@ -30,16 +29,10 @@ block content
           .row
             section#btns
               div.col-lg-2.col-md-2.col-sm-1.col-xs-1
-              button.btn.btn-success#get-metrics.col-lg-4.col-md-4.col-sm-5.col-xs-5 Show Graph
-              button.btn.btn-warning#save-metrics.col-lg-4.col-md-4.col-sm-5.col-xs-5 Save Metrics
+              button.btn.btn-success#get-metrics.col-lg-3.col-md-3.col-sm-4.col-xs-4 Show Graph
+              div.col-lg-2.col-md-2.col-sm-2.col-xs-2
+              button.btn.btn-warning#save-metrics.col-lg-3.col-md-3.col-sm-4.col-xs-4 Save Metrics
               div.col-lg-2.col-md-2.col-sm-1.col-xs-1
-          .row
-            section#bloc_metrics
-              div.col-lg-1.col-md-1.col-sm-1.col-xs-1
-              table#tab-metrics(border="1").col-lg-4.col-md-4.col-sm-4.col-xs-2
-              div.col-lg-1.col-md-1.col-sm-1.col-xs-1
-              svg#graph.col-lg-5.col-md-5.col-sm-5.col-xs-7
-              div.col-lg-1.col-md-1.col-sm-1.col-xs-1
 
           .row
             form.form-inline#save(action='metric/save.json',method='post')
@@ -47,5 +40,13 @@ block content
               input(type='text',name='timestamp', class='form-control', placeholder="Param1")
               input(type='text',name='value', class='form-control', placeholder="Param2")
               input(type='submit', name='submit',class='form-control btn btn-primary',value='Save')
+
+          .row
+            section#bloc_metrics
+              div.col-lg-1.col-md-1.col-sm-1.col-xs-1
+              table#tab-metrics(border="1").col-lg-4.col-md-4.col-sm-4.col-xs-2
+              div.col-lg-1.col-md-1.col-sm-1.col-xs-1
+              svg#graph.col-lg-5.col-md-5.col-sm-5.col-xs-7
+              div.col-lg-1.col-md-1.col-sm-1.col-xs-1
 
         div.col-lg-2

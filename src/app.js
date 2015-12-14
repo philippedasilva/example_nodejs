@@ -201,6 +201,10 @@
     return res.status(200).send(logged + '\n' + loguser);
   });
 
+  app.post('/delete_metrics', function(req, res) {
+    return res.status(200).send(req.params);
+  });
+
   app.listen(app.get('port'), function(req, res) {
     return console.log("Server started");
   });
