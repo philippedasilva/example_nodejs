@@ -54,7 +54,10 @@ authCheckUser = (req,res,next) ->
     next()
 
 app.get '/user',authCheckUser,(req,res) ->
-  res.render 'user', name:req.session.username
+  res.render 'user'
+
+app.get '/username.json', (req,res) ->
+  res.status(200).json req.session.username  
 
 # -------------------------------------------
 
@@ -103,7 +106,8 @@ app.post '/metric/save.json', (req, res) ->
     else
       metrics_users.save req.session.username, req.body.id, (err) ->
         if err then res.status(500).json err
-        else res.status(200).send "Metrics_users saved"
+        #else res.status(200).send "Metrics_users saved"
+        else res.redirect '/user'
 
 #Inscription d'un user
 app.post '/inscrire', (req,res) ->

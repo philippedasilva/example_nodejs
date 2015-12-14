@@ -5,6 +5,9 @@
     $('#login').hide();
     $("#bloc_metrics").hide();
     $('#save').hide();
+    $.getJSON('/username.json', function(data) {
+      return $('#username').html(data);
+    });
     $('#btn_inscrire').click(function() {
       $('#login').hide();
       return $('#inscrire').toggle();
@@ -17,12 +20,13 @@
       return $('#save').toggle();
     });
     return $('#get-metrics').click(function() {
-      return $.getJSON('/metrics.json', function(data) {
+      return $.getJSON('/metricsbyuser.json', function(data) {
         var barPadding, dataset, entete, h, i, j, len, metric, svg, w;
         $('#tab-metrics').empty();
         $('#bloc_metrics svg').empty();
-        entete = "<th>Key</th>";
+        entete = "<th>Timestamp</th>";
         entete += "<th>Value</th>";
+        entete += "<th>Suppr</th>";
         $('#tab-metrics').append(entete);
         i = 0;
         dataset = [];
@@ -32,6 +36,7 @@
           $('#tab-metrics').append("<tr></tr>");
           $('#tab-metrics tr:eq(' + i + ')').append("<td>" + metric.timestamp + "</td>");
           $('#tab-metrics tr:eq(' + i + ')').append("<td>" + metric.value + "</td>");
+          $('#tab-metrics tr:eq(' + i + ')').append("<button class='btn btn-danger btn_suppr' data-id='" + metric.id + "'>X</button>");
           i++;
         }
         w = 500;

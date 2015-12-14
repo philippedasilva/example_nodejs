@@ -72,9 +72,11 @@
   };
 
   app.get('/user', authCheckUser, function(req, res) {
-    return res.render('user', {
-      name: req.session.username
-    });
+    return res.render('user');
+  });
+
+  app.get('/username.json', function(req, res) {
+    return res.status(200).json(req.session.username);
   });
 
   app.get('/users.json', function(req, res) {
@@ -111,15 +113,6 @@
       i = 0;
       j = 0;
       return metrics_users.get(req.session.username, function(err, data) {
-
-        /*
-          metrics.get d.id_metric, (err,met) ->
-            tab[i] =
-              username : req.session.username,
-              id_metric: met.id,
-              timestamp: met.timestamp,
-              value: met.value
-         */
         return metrics.get(1, function(err, met) {
           var d, k, l, len, len1, m;
           for (k = 0, len = data.length; k < len; k++) {
@@ -154,7 +147,7 @@
           if (err) {
             return res.status(500).json(err);
           } else {
-            return res.status(200).send("Metrics_users saved");
+            return res.redirect('/user');
           }
         });
       }

@@ -4,6 +4,9 @@ $(document).ready ->
   $("#bloc_metrics").hide()
   $('#save').hide()
 
+  $.getJSON '/username.json', (data) ->
+    $('#username').html data
+
   $('#btn_inscrire').click ->
     $('#login').hide()
     $('#inscrire').toggle()
@@ -16,11 +19,12 @@ $(document).ready ->
     $('#save').toggle()
 
   $('#get-metrics').click ->
-    $.getJSON '/metrics.json', (data) ->
+    $.getJSON '/metricsbyuser.json', (data) ->
       $('#tab-metrics').empty()
       $('#bloc_metrics svg').empty()
-      entete = "<th>Key</th>"
+      entete = "<th>Timestamp</th>"
       entete += "<th>Value</th>"
+      entete += "<th>Suppr</th>"
       $('#tab-metrics').append(entete)
 
       i=0
@@ -30,6 +34,7 @@ $(document).ready ->
         $('#tab-metrics').append "<tr></tr>"
         $('#tab-metrics tr:eq('+i+')').append "<td>#{metric.timestamp}</td>"
         $('#tab-metrics tr:eq('+i+')').append "<td>#{metric.value}</td>"
+        $('#tab-metrics tr:eq('+i+')').append "<button class='btn btn-danger btn_suppr' data-id='#{metric.id}'>X</button>"
         i++
 
       #Graphique
