@@ -81,7 +81,8 @@ app.get '/metrics_users.json', (req,res) ->
     res.status(200).send "Non loggé"
   else
     metrics_users.get req.session.username, (err,data) ->
-      res.status(200).send data
+      if err then throw err
+      res.status(200).json data
     #res.status(200).send req.session.username
 
 #Renvoie les numeros de batch metrics de l'user
@@ -92,10 +93,12 @@ app.get '/batchbyuser.json',(req,res) ->
     tab = []
     i=0
     metrics_users.get req.session.username, (err,data) ->
-        for mu in data
-          tab[i] = mu.id_batch
-          i++
-        res.status(200).send tab
+        if err then throw err
+        else
+          for mu in data
+            tab[i] = mu.id_batch
+            i++
+          res.status(200).send tab
 
 #Renvoie les metrics propres à chaque user
 app.get '/metricsbyuser.json', (req,res) ->
@@ -105,13 +108,15 @@ app.get '/metricsbyuser.json', (req,res) ->
     tab = []
     i=0
     metrics_users.get req.session.username, (err,data) ->
-      metrics.get 1, (err,met) ->
-        for mu in data
-          for m in met
-            if mu.id_batch == m.id_batch
-              tab[i] = m
-              i++
-        res.status(200).send tab
+      if err then throw err
+      else
+        metrics.get 1, (err,met) ->
+          for mu in data
+            for m in met
+              if mu.id_batch == m.id_batch
+                tab[i] = m
+                i++
+          res.status(200).json tab
 
 
 #Post de metrics (save en bdd)
@@ -144,7 +149,7 @@ app.post '/login', (req,res) ->
   password = req.body.password
   users.get username, (err, data) ->
     if err
-      res.status(200).send "Authentifacation failed (username introuvable en bdd)"
+      res.status(200).send err
     unless data.password == password
       res.redirect '/'
     else

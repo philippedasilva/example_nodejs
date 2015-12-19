@@ -1,6 +1,9 @@
 #!/bin/bash
 
 cd ..
+cd public/js
+coffee -c index.coffee
+cd ../..
 cd node_modules/.bin
 nodemon ../../src/app.coffee
 

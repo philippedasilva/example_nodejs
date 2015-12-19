@@ -5,9 +5,6 @@
     $('#login').hide();
     $("#bloc_metrics").hide();
     $('#save').hide();
-    $.getJSON('/username.json', function(data) {
-      return $('#username').html(data);
-    });
     $('#btn_inscrire').click(function() {
       $('#login').hide();
       return $('#inscrire').toggle();
@@ -19,41 +16,93 @@
     $('#save-metrics').click(function() {
       return $('#save').toggle();
     });
-    return $('#get-metrics').click(function() {
-      return $.getJSON('/metricsbyuser.json', function(data) {
-        var barPadding, dataset, entete, h, i, j, len, metric, svg, w;
-        $('#tab-metrics').empty();
-        $('#bloc_metrics svg').empty();
-        entete = "<th>Timestamp</th>";
-        entete += "<th>Value</th>";
-        entete += "<th>Suppr</th>";
-        $('#tab-metrics').append(entete);
-        i = 0;
-        dataset = [];
-        for (j = 0, len = data.length; j < len; j++) {
-          metric = data[j];
-          dataset[i] = metric.value;
-          $('#tab-metrics').append("<tr></tr>");
-          $('#tab-metrics tr:eq(' + i + ')').append("<td>" + metric.timestamp + "</td>");
-          $('#tab-metrics tr:eq(' + i + ')').append("<td>" + metric.value + "</td>");
-          $('#tab-metrics tr:eq(' + i + ')').append("<td><button class='btn btn-danger btn_suppr' data-id='" + metric.id + "'>X</button></td>");
-          i++;
+    $.getJSON('/username.json', function(data) {
+      return $('#username').html(data);
+    });
+    return $.getJSON('/metrics_users.json', function(batch) {
+      var j, len, mu;
+      if (batch.length > 0) {
+        for (j = 0, len = batch.length; j < len; j++) {
+          mu = batch[j];
+          $('#btns').append("<button class='btn btn-success btn_batch' data-id='" + mu.id_batch + "'>Batch n° " + mu.id_batch + "</button>");
         }
-        w = 500;
-        h = 100;
-        barPadding = 1;
-        svg = d3.select('#bloc_metrics svg');
-        svg.selectAll("rect").data(dataset).enter().append("rect").attr("x", 0).attr("width", 20).attr("x", function(d, i) {
-          return i * (w / 15 - barPadding);
-        }).attr("height", function(d) {
-          return d * 8;
-        }).attr("y", function(d) {
-          return h - d * 4;
-        }).attr("fill", function(d) {
-          return "rgb(0, " + (d * 10) + ",0)";
+        return $('.btn_batch').click(function() {
+          var id_batch;
+          id_batch = $(this).data("id");
+          return $.getJSON('/metricsbyuser.json', function(data) {
+            var entete, i, k, len1, m;
+            $('#tab-metrics').empty();
+            $('#bloc_metrics svg').empty();
+            entete = "<th>Timestamp</th>";
+            entete += "<th>Value</th>";
+            entete += "<th>Suppr</th>";
+            $('#tab-metrics').append(entete);
+            i = 0;
+            for (k = 0, len1 = data.length; k < len1; k++) {
+              m = data[k];
+              if (("" + m.id_batch) === ("" + id_batch)) {
+                $('#tab-metrics').append("<tr></tr>");
+                $('#tab-metrics tr:eq(' + i + ')').append("<td>" + m.timestamp + "</td>");
+                $('#tab-metrics tr:eq(' + i + ')').append("<td>" + m.value + "</td>");
+                $('#tab-metrics tr:eq(' + i + ')').append("<td><button class='btn btn-danger btn_suppr' data-id='" + m.id_metric + "'>X</button></td>");
+                i++;
+              }
+            }
+            return $('#bloc_metrics').show();
+          });
         });
+      }
 
-        /*
+      /*
+      $.getJSON '/metricsbyuser.json', (data) ->
+        $('#tab-metrics').empty()
+        $('#bloc_metrics svg').empty()
+        entete = "<th>Timestamp</th>"
+        entete += "<th>Value</th>"
+        entete += "<th>Suppr</th>"
+        $('#tab-metrics').append(entete)
+      
+        i=0
+        dataset = []
+        for metric in data
+          dataset[i] = metric.value
+          $('#tab-metrics').append "<tr></tr>"
+          $('#tab-metrics tr:eq('+i+')').append "<td>#{metric.timestamp}</td>"
+          $('#tab-metrics tr:eq('+i+')').append "<td>#{metric.value}</td>"
+          $('#tab-metrics tr:eq('+i+')').append "<td><button class='btn btn-danger btn_suppr' data-id='#{metric.id}'>X</button></td>"
+          i++
+      
+        #Graphique
+        #dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ]
+      
+        w = 500
+        h = 100
+        barPadding = 1
+      
+        svg = d3.select('#bloc_metrics svg')
+        svg.selectAll("rect")
+        .data dataset
+        .enter()
+        .append "rect"
+        .attr "x", 0
+        #.attr "y", 0
+        .attr "width", 20
+        #.attr "height", 100
+        .attr "x", (d, i) ->
+          #return i * (w / dataset.length - barPadding)
+          return i * (w / 15 - barPadding)
+        .attr "height", (d) ->
+          return d *8
+        .attr "y", (d) ->
+          return h - d*4
+        .attr "fill", (d) ->
+          return "rgb(0, " + (d * 10) + ",0)"
+       */
+    });
+  });
+
+
+  /*
         margin =
         top: 10
         right: 10
@@ -89,12 +138,6 @@
         svg.append('g').attr('class', 'y axis').call(yAxis).append('text').attr('transform', 'rotate(-90)').attr('y', 6).attr('dy', '.71em').style('text-anchor', 'end').text 'Price ($)'
         svg.append('path').datum(data).attr('class', 'line').attr 'd', line
         return
-         */
-        if (data.length > 0) {
-          return $('#bloc_metrics').toggle();
-        }
-      });
-    });
-  });
+   */
 
 }).call(this);

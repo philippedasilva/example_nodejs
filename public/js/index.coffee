@@ -4,9 +4,6 @@ $(document).ready ->
   $("#bloc_metrics").hide()
   $('#save').hide()
 
-  $.getJSON '/username.json', (data) ->
-    $('#username').html data
-
   $('#btn_inscrire').click ->
     $('#login').hide()
     $('#inscrire').toggle()
@@ -18,7 +15,39 @@ $(document).ready ->
   $('#save-metrics').click ->
     $('#save').toggle()
 
-  $('#get-metrics').click ->
+  $.getJSON '/username.json', (data) ->
+    $('#username').html data
+
+  #Création de boutons pour chaque batch d'un user
+  $.getJSON '/metrics_users.json', (batch) ->
+    if batch.length > 0
+      for mu in batch
+        $('#btns').append "<button class='btn btn-success btn_batch' data-id='#{mu.id_batch}'>Batch n° #{mu.id_batch}</button>"
+
+      $('.btn_batch').click ->
+        id_batch = $(this).data "id"
+        $.getJSON '/metricsbyuser.json', (data) ->
+          #Inialisation du tableau
+          $('#tab-metrics').empty()
+          $('#bloc_metrics svg').empty()
+          entete = "<th>Timestamp</th>"
+          entete += "<th>Value</th>"
+          entete += "<th>Suppr</th>"
+          $('#tab-metrics').append(entete)
+
+          #Récupération des metrics du batch correspondant
+          i=0
+          #tab = [][]
+          for m in data
+            if "#{m.id_batch}" == "#{id_batch}"
+              $('#tab-metrics').append "<tr></tr>"
+              $('#tab-metrics tr:eq('+i+')').append "<td>#{m.timestamp}</td>"
+              $('#tab-metrics tr:eq('+i+')').append "<td>#{m.value}</td>"
+              $('#tab-metrics tr:eq('+i+')').append "<td><button class='btn btn-danger btn_suppr' data-id='#{m.id_metric}'>X</button></td>"
+              i++
+
+          $('#bloc_metrics').show()
+    ###
     $.getJSON '/metricsbyuser.json', (data) ->
       $('#tab-metrics').empty()
       $('#bloc_metrics svg').empty()
@@ -62,8 +91,8 @@ $(document).ready ->
         return h - d*4
       .attr "fill", (d) ->
         return "rgb(0, " + (d * 10) + ",0)"
-
       ###
+###
       margin =
       top: 10
       right: 10
@@ -100,10 +129,3 @@ $(document).ready ->
       svg.append('path').datum(data).attr('class', 'line').attr 'd', line
       return
       ###
-
-      if data.length > 0
-        $('#bloc_metrics').toggle()
-  ###
-  $('.btn_suppr').click ->
-    window.location.href = "/path"
-  ###
