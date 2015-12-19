@@ -103,3 +103,7 @@ $(document).ready ->
 
       if data.length > 0
         $('#bloc_metrics').toggle()
+  ###
+  $('.btn_suppr').click ->
+    window.location.href = "/path"
+  ###

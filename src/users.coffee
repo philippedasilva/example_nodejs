@@ -30,5 +30,3 @@ module.exports =
     ws.on 'close', callback
     ws.write key: "user:#{username}", value: "#{name}.#{password}.#{email}"
     ws.end()
-
-  #remove:(username,callback) ->

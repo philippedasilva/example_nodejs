@@ -1,57 +1,157 @@
 #!/usr/bin/env coffee
 
-exec = require('child_process').exec
+#exec = require('child_process').exec
 
-exec "rm -rf #{__dirname}/../db/metrics && mkdir #{__dirname}/../db/metrics", (err, stdout, stderr) ->
-  if err then throw err
+#exec "rm -rf #{__dirname}/../db/metrics && mkdir #{__dirname}/../db/metrics", (err, stdout, stderr) ->
+#  if err then throw err
 
   # Require after rm and mkdir or DB is deleted once in callback
+
   metrics = require '../src/metrics'
+  metrics_users = require '../src/metrics_users'
+  users = require '../src/users'
 
   console.log 'DB deleted'
-  console.log 'Creating metrics'
-  met = [
-    [
-      timestamp: new Date('2015-12-01 10:30 UTC').getTime(),
-      value: 26
+  console.log 'Creating users'
+
+  users_list = [
+      username: "root",
+      name: "root",
+      password: "root",
+      email: "root@root.fr"
     ,
-      timestamp: new Date('2015-12-01 10:35 UTC').getTime(),
-      value: 23
+      username: "fil",
+      name: "Phil",
+      password: "fil",
+      email: "fil@fil.fr"
     ,
-      timestamp: new Date('2015-12-01 10:40 UTC').getTime(),
-      value: 20
-    ,
-      timestamp: new Date('2015-12-01 10:45 UTC').getTime(),
-      value: 19
-    ,
-      timestamp: new Date('2015-12-01 10:50 UTC').getTime(),
-      value: 18
-    ,
-      timestamp: new Date('2015-12-01 10:55 UTC').getTime(),
-      value: 20
-    ],
-      [
-        timestamp: new Date('2015-11-01 10:30 UTC').getTime(),
-        value: 26
-      ,
-        timestamp: new Date('2015-11-01 10:35 UTC').getTime(),
-        value: 23
-      ,
-        timestamp: new Date('2015-11-01 10:40 UTC').getTime(),
-        value: 20
-      ,
-        timestamp: new Date('2015-11-01 10:45 UTC').getTime(),
-        value: 19
-      ,
-        timestamp: new Date('2015-11-01 10:50 UTC').getTime(),
-        value: 18
-      ,
-        timestamp: new Date('2015-11-01 10:55 UTC').getTime(),
-        value: 20
-      ]
+      username: "root2",
+      name: "root2",
+      password: "root2",
+      email: "root2@root.fr"
   ]
 
-  for metric, index in met
-    console.log "Saving batch #{index + 1}"
-    metrics.save index + 1, metric, (err) ->
+  for u,index in users_list
+    #users.save username,password,name,email
+    console.log "Saving user #{index + 1}"
+    users.save u.username, u.password, u.name, u.email, (err) ->
+      return next err if err
+
+  metrics_list= [
+    [
+        id_metric: 1
+        timestamp: 1
+        value: 1
+      ,
+        id_metric: 2
+        timestamp: 2
+        value: 1
+      ,
+        id_metric: 3
+        timestamp: 2
+        value: 3
+      ,
+        id_metric: 4
+        timestamp: 8
+        value: 5
+      ,
+        id_metric: 5
+        timestamp: 7
+        value: 6
+    ]
+    ,
+    [
+        id_metric: 1
+        timestamp: 4
+        value: 3
+      ,
+        id_metric: 2
+        timestamp: 1
+        value: 1
+      ,
+        id_metric: 3
+        timestamp: 6
+        value: 5
+      ,
+        id_metric: 4
+        timestamp: 4
+        value: 3
+      ,
+        id_metric: 5
+        timestamp: 8
+        value: 8
+    ]
+    ,
+    [
+        id_metric: 1
+        timestamp: 2
+        value: 2
+      ,
+        id_metric: 2
+        timestamp: 3
+        value: 7
+      ,
+        id_metric: 3
+        timestamp: 5
+        value: 5
+      ,
+        id_metric: 4
+        timestamp: 7
+        value: 2
+      ,
+        id_metric: 5
+        timestamp: 9
+        value: 11
+    ]
+    ,
+    [
+        id_metric: 1
+        timestamp: 3
+        value: 6
+      ,
+        id_metric: 2
+        timestamp: 6
+        value: 8
+      ,
+        id_metric: 3
+        timestamp: 2
+        value: 2
+      ,
+        id_metric: 4
+        timestamp: 4
+        value: 1
+      ,
+        id_metric: 5
+        timestamp: 1
+        value: 7
+    ]
+  ]
+
+  for m, index in metrics_list
+    console.log "Saving metrics of batch #{index + 1}"
+    #users.save username,password,name,email
+    metrics.save index+1,m, (err) ->
+      return next err if err
+
+  metrics_users_list = [
+      username: "root"
+      id_batch: 1
+    ,
+      username: "root2"
+      id_batch: 2
+    ,
+      username: "root"
+      id_batch: 3
+    ,
+      username: "root"
+      id_batch: 4
+    ,
+      username: "fil"
+      id_batch: 1
+  ]
+
+  for mu in metrics_users_list
+    console.log "Saving concordance user "+mu.username + " with batch n° "+mu.id_batch
+    #users.save username,password,name,email
+    metrics_users.save mu.username,mu.id_batch, (err) ->
       return next err if err

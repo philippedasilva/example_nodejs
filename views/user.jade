@@ -36,7 +36,8 @@ div.container
 
           .row
             form.form-inline#save(action='metric/save.json',method='post')
-              input(type='text',name='id', class='form-control', placeholder="ID")
+              input(type='text',name='id_batch', class='form-control', placeholder="ID BATCH")
+              input(type='text',name='id', class='form-control', placeholder="ID METRIC")
               input(type='text',name='timestamp', class='form-control', placeholder="Param1")
               input(type='text',name='value', class='form-control', placeholder="Param2")
               input(type='submit', name='submit',class='form-control btn btn-primary',value='Save')

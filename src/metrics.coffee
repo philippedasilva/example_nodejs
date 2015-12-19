@@ -14,11 +14,12 @@ module.exports =
       #gte: "metric:#{id}"
       #lte: "metric:#{id}"
     rs.on 'data', (data) ->
-      [_, _id] = data.key.split ':'
+      [_,_id_batch, _id_metric] = data.key.split ':'
       [_timestamp,_value] = data.value.split ':'
 
       metrics[i] =
-        id: _id,
+        id_batch: _id_batch,
+        id_metric: _id_metric
         timestamp:_timestamp,
         value: _value
       i++
@@ -36,11 +37,11 @@ module.exports =
   `callback`: Callback function takes an error or null as parameter
   ###
 
-  save: (id, metrics, callback) ->
+  save: (id_batch,metrics, callback) ->
     ws = db.createWriteStream()
     ws.on 'error', callback
     ws.on 'close', callback
     for m in metrics
-      {timestamp, value} = m
-      ws.write key: "metric:#{id}", value: "#{timestamp}:#{value}"
+      {id_metric,timestamp, value} = m
+      ws.write key: "metric:#{id_batch}:#{id_metric}", value: "#{timestamp}:#{value}"
     ws.end()
