@@ -1,14 +1,16 @@
 body {
-  background-image: url("/img/background_maths.jpg");
+  background-image: url("/img/background.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   font-family: 'Roboto';
 }
 .container {
-  background: rgba(0,0,0,0.65);
+/*background rgba(0,0,0,0.65)*/
   margin-top: 3%;
   margin-bottom: 1%;
   border-radius: 7px;
-  font-size: 1.1em;
-  color: #fff;
+  font-size: 1.2em;
+/*color white*/
 }
 header {
   text-align: center;
@@ -26,24 +28,24 @@ main form {
   margin-top: 3%;
 }
 main form label,
-input {
+main form input {
   margin-right: 10px;
 }
 #apropos {
   margin-bottom: 3%;
 }
 #apropos h3,
-p {
+#apropos p {
   text-align: center;
 }
 #img_technos figure {
   text-align: center;
 }
-#img_technos figure img {
+img {
   border-radius: 50%;
   padding: 2%;
 }
-#img_technos figure figurecaption {
+figurecaption {
   text-align: center;
 }
 #page_user {
@@ -59,20 +61,64 @@ section {
 main #bloc_metrics {
   margin-top: 7%;
 }
-#graph {
-  border-bottom: solid 1px;
-}
-main #tab-metrics th,
-td {
+main #bloc_metrics h3 {
   text-align: center;
+}
+main #bloc_metrics th,
+main #bloc_metrics td {
+  text-align: center;
+}
+main #bloc_metrics #graph {
+  display: block;
+  padding-left: 7%;
 }
 .btn {
   text-align: center;
 }
-#graph {
-  padding-top: 2%;
+.btn_batch {
+  margin-left: 1%;
 }
 footer p {
   margin-top: 4%;
   float: left;
+}
+/*Graphique*/
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+.bar {
+  fill: #ffa500;
+}
+.bar:hover {
+  fill: #ff4500;
+}
+.x.axis path {
+  display: none;
+}
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0,0,0,0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
 }

@@ -28,9 +28,10 @@
         }
         return $('.btn_batch').click(function() {
           var id_batch;
+          $('#bloc_metrics h3').html($(this).html());
           id_batch = $(this).data("id");
           return $.getJSON('/metricsbyuser.json', function(data) {
-            var entete, i, k, len1, m;
+            var entete, formatInt, height, i, k, len1, m, margin, svg, tab, tip, type, width, x, xAxis, y, yAxis;
             $('#tab-metrics').empty();
             $('#bloc_metrics svg').empty();
             entete = "<th>Timestamp</th>";
@@ -38,6 +39,7 @@
             entete += "<th>Suppr</th>";
             $('#tab-metrics').append(entete);
             i = 0;
+            tab = [];
             for (k = 0, len1 = data.length; k < len1; k++) {
               m = data[k];
               if (("" + m.id_batch) === ("" + id_batch)) {
@@ -45,99 +47,58 @@
                 $('#tab-metrics tr:eq(' + i + ')').append("<td>" + m.timestamp + "</td>");
                 $('#tab-metrics tr:eq(' + i + ')').append("<td>" + m.value + "</td>");
                 $('#tab-metrics tr:eq(' + i + ')').append("<td><button class='btn btn-danger btn_suppr' data-id='" + m.id_metric + "'>X</button></td>");
+                tab[i] = {
+                  "timestamp": "" + m.timestamp,
+                  "value": "" + m.value
+                };
                 i++;
               }
             }
+            $('#graph').empty();
+            margin = {
+              top: 20,
+              right: 20,
+              bottom: 20,
+              left: 20
+            };
+            width = 300 - margin.left - margin.right;
+            height = 200 - margin.top - margin.bottom;
+            formatInt = d3.format("d");
+            x = d3.scale.ordinal().rangeRoundBands([0, width], .1);
+            y = d3.scale.linear().range([height, 0]);
+            xAxis = d3.svg.axis().scale(x).orient('bottom');
+            yAxis = d3.svg.axis().scale(y).orient('left').tickFormat(formatInt);
+            tip = d3.tip().attr('class', 'd3-tip').offset([-10, 0]).html(function(d) {
+              return '<strong>Value:</strong> <span style=\'color:red\'>' + d.value + '</span>';
+            });
+            svg = d3.select('#graph').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+            type = function(d) {
+              d.value = +d.value;
+              return d;
+            };
+            svg.call(tip);
+            x.domain(tab.map(function(d) {
+              return d.timestamp;
+            }));
+            y.domain([
+              0, d3.max(tab, function(d) {
+                return d.value;
+              })
+            ]);
+            svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')').call(xAxis);
+            svg.append('g').attr('class', 'y axis').call(yAxis).append('text').attr('transform', 'rotate(-90)').attr('y', 10).attr('dy', '.71em').style('text-anchor', 'end').text('Value');
+            svg.selectAll('.bar').data(tab).enter().append('rect').attr('class', 'bar').attr('x', function(d) {
+              return x(d.timestamp);
+            }).attr('width', x.rangeBand()).attr('y', function(d) {
+              return y(d.value);
+            }).attr('height', function(d) {
+              return height - y(d.value);
+            }).on('mouseover', tip.show).on('mouseout', tip.hide);
             return $('#bloc_metrics').show();
           });
         });
       }
-
-      /*
-      $.getJSON '/metricsbyuser.json', (data) ->
-        $('#tab-metrics').empty()
-        $('#bloc_metrics svg').empty()
-        entete = "<th>Timestamp</th>"
-        entete += "<th>Value</th>"
-        entete += "<th>Suppr</th>"
-        $('#tab-metrics').append(entete)
-      
-        i=0
-        dataset = []
-        for metric in data
-          dataset[i] = metric.value
-          $('#tab-metrics').append "<tr></tr>"
-          $('#tab-metrics tr:eq('+i+')').append "<td>#{metric.timestamp}</td>"
-          $('#tab-metrics tr:eq('+i+')').append "<td>#{metric.value}</td>"
-          $('#tab-metrics tr:eq('+i+')').append "<td><button class='btn btn-danger btn_suppr' data-id='#{metric.id}'>X</button></td>"
-          i++
-      
-        #Graphique
-        #dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ]
-      
-        w = 500
-        h = 100
-        barPadding = 1
-      
-        svg = d3.select('#bloc_metrics svg')
-        svg.selectAll("rect")
-        .data dataset
-        .enter()
-        .append "rect"
-        .attr "x", 0
-        #.attr "y", 0
-        .attr "width", 20
-        #.attr "height", 100
-        .attr "x", (d, i) ->
-          #return i * (w / dataset.length - barPadding)
-          return i * (w / 15 - barPadding)
-        .attr "height", (d) ->
-          return d *8
-        .attr "y", (d) ->
-          return h - d*4
-        .attr "fill", (d) ->
-          return "rgb(0, " + (d * 10) + ",0)"
-       */
     });
   });
-
-
-  /*
-        margin =
-        top: 10
-        right: 10
-        bottom: 15
-        left: 25
-        width = 480 - (margin.left) - (margin.right)
-        height = 250 - (margin.top) - (margin.bottom)
-        #parseDate = d3.time.format('%d-%b-%y').parse
-        x = d3.scale.linear().range([
-          0
-          width
-        ])
-        y = d3.scale.linear().range([
-          height
-          0
-        ])
-        xAxis = d3.svg.axis().scale(x).orient('bottom')
-        yAxis = d3.svg.axis().scale(y).orient('left')
-        line = d3.svg.line().x((m) ->
-          x m.timestamp
-        ).y((m) ->
-          y m.value
-        )
-        svg = d3.select('body').append('svg').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
-        for metric in data
-          x.domain d3.extent(metric, (m) ->
-            m.timestamp
-          )
-          y.domain d3.extent(metric, (m) ->
-            m.value
-          )
-        svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0,' + height + ')').call xAxis
-        svg.append('g').attr('class', 'y axis').call(yAxis).append('text').attr('transform', 'rotate(-90)').attr('y', 6).attr('dy', '.71em').style('text-anchor', 'end').text 'Price ($)'
-        svg.append('path').datum(data).attr('class', 'line').attr 'd', line
-        return
-   */
 
 }).call(this);

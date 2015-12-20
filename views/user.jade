@@ -10,7 +10,7 @@ div.container
             section#connected
               h3 User Page
               h4 Connecté en tant que :
-                span#username Username
+                span#username
           .row
             section#deconnexion
               div.col-lg-5.col-md-5.col-sm-4.col-xs-4
@@ -27,16 +27,21 @@ div.container
                 |Afficher les metrics sous forme numérique et graphique
 
           .row
-            section#btns.col-lg-2.col-md-2.col-sm-1.col-xs-1
-
+            section.col-lg-2.col-md-2.col-sm-1.col-xs-1
+            section#btns.col-lg-8.col-md-8.col-sm-10.col-xs-10
+            section.col-lg-2.col-md-2.col-sm-1.col-xs-1
+          .row
             section.col-lg-1.col-md-1.col-sm-1.col-xs-1
 
-            section#bloc_metrics.col-lg-10.col-md-10.col-sm-11.col-xs-11
+            section#bloc_metrics.col-lg-10.col-md-10.col-sm-10.col-xs-10
+              .row
+                h3
+
               .row
                 div.col-lg-1.col-md-1.col-sm-1.col-xs-1
-                table#tab-metrics(border="1").col-lg-4.col-md-4.col-sm-4.col-xs-2
+                table#tab-metrics(border="1").col-lg-3.col-md-3.col-sm-3.col-xs-3
                 div.col-lg-1.col-md-1.col-sm-1.col-xs-1
-                svg#graph.col-lg-5.col-md-5.col-sm-5.col-xs-7
+                svg#graph.col-lg-6.col-md-6.col-sm-6.col-xs-6
                 div.col-lg-1.col-md-1.col-sm-1.col-xs-1
               .row
                 form.form-inline#save(action='metric/save.json',method='post')
@@ -45,4 +50,6 @@ div.container
                   input(type='text',name='timestamp', class='form-control', placeholder="Param1")
                   input(type='text',name='value', class='form-control', placeholder="Param2")
                   input(type='submit', name='submit',class='form-control btn btn-primary',value='Save')
+
+            section.col-lg-1.col-md-1.col-sm-1.col-xs-1
         div.col-lg-2
