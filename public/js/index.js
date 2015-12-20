@@ -16,6 +16,9 @@
     $('#save-metrics').click(function() {
       return $('#save').toggle();
     });
+    $('.btn_add_metric').click(function() {
+      return $('#save').toggle();
+    });
     $.getJSON('/username.json', function(data) {
       return $('#username').html(data);
     });
@@ -30,13 +33,13 @@
           var id_batch;
           $('#bloc_metrics h3').html($(this).html());
           id_batch = $(this).data("id");
+          $("input[name='id_batch']").val(id_batch);
           return $.getJSON('/metricsbyuser.json', function(data) {
-            var entete, formatInt, height, i, k, len1, m, margin, svg, tab, tip, type, width, x, xAxis, y, yAxis;
+            var entete, formatInt, height, i, k, len1, m, margin, svg, tab, type, width, x, xAxis, y, yAxis;
             $('#tab-metrics').empty();
             $('#bloc_metrics svg').empty();
             entete = "<th>Timestamp</th>";
             entete += "<th>Value</th>";
-            entete += "<th>Suppr</th>";
             $('#tab-metrics').append(entete);
             i = 0;
             tab = [];
@@ -46,7 +49,6 @@
                 $('#tab-metrics').append("<tr></tr>");
                 $('#tab-metrics tr:eq(' + i + ')').append("<td>" + m.timestamp + "</td>");
                 $('#tab-metrics tr:eq(' + i + ')').append("<td>" + m.value + "</td>");
-                $('#tab-metrics tr:eq(' + i + ')').append("<td><button class='btn btn-danger btn_suppr' data-id='" + m.id_metric + "'>X</button></td>");
                 tab[i] = {
                   "timestamp": "" + m.timestamp,
                   "value": "" + m.value
@@ -56,27 +58,23 @@
             }
             $('#graph').empty();
             margin = {
-              top: 20,
+              top: 10,
               right: 20,
-              bottom: 20,
+              bottom: 30,
               left: 20
             };
             width = 300 - margin.left - margin.right;
-            height = 200 - margin.top - margin.bottom;
+            height = 230 - margin.top - margin.bottom;
             formatInt = d3.format("d");
             x = d3.scale.ordinal().rangeRoundBands([0, width], .1);
             y = d3.scale.linear().range([height, 0]);
             xAxis = d3.svg.axis().scale(x).orient('bottom');
             yAxis = d3.svg.axis().scale(y).orient('left').tickFormat(formatInt);
-            tip = d3.tip().attr('class', 'd3-tip').offset([-10, 0]).html(function(d) {
-              return '<strong>Value:</strong> <span style=\'color:red\'>' + d.value + '</span>';
-            });
             svg = d3.select('#graph').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
             type = function(d) {
               d.value = +d.value;
               return d;
             };
-            svg.call(tip);
             x.domain(tab.map(function(d) {
               return d.timestamp;
             }));
@@ -93,7 +91,7 @@
               return y(d.value);
             }).attr('height', function(d) {
               return height - y(d.value);
-            }).on('mouseover', tip.show).on('mouseout', tip.hide);
+            });
             return $('#bloc_metrics').show();
           });
         });

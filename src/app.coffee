@@ -27,15 +27,6 @@ app.use session
 
 app.use require('body-parser')()
 
-###
-app.get '/', (req,res)->
-  res.render 'index'
-
-app.get '/user',(req,res) ->
-  res.render 'user'
-###
-# -----------------------------------------
-
 ##Middleware authCheckHome : permet de renvoyer sur la page d'accueil sauf si le user est connecté alors il sera renvoyer sur sa page user
 authCheckHome = (req,res,next) ->
   if req.session.loggedIn == true
@@ -83,7 +74,6 @@ app.get '/metrics_users.json', (req,res) ->
     metrics_users.get req.session.username, (err,data) ->
       if err then throw err
       res.status(200).json data
-    #res.status(200).send req.session.username
 
 #Renvoie les numeros de batch metrics de l'user
 app.get '/batchbyuser.json',(req,res) ->
@@ -118,14 +108,13 @@ app.get '/metricsbyuser.json', (req,res) ->
                 i++
           res.status(200).json tab
 
-
 #Post de metrics (save en bdd)
 app.post '/metric/save.json', (req, res) ->
   met=[
     timestamp: req.body.timestamp,
     value: req.body.value
   ]
-  metrics.save req.body.id_batch,req.body.id_metric, met, (err) ->
+  metrics.save req.body.id_batch, met, (err) ->
     if err then res.status(500).json err
     else
       metrics_users.save req.session.username, req.body.id_batch, (err) ->

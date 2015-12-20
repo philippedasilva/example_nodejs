@@ -15,6 +15,9 @@ $(document).ready ->
   $('#save-metrics').click ->
     $('#save').toggle()
 
+  $('.btn_add_metric').click ->
+    $('#save').toggle()
+
   $.getJSON '/username.json', (data) ->
     $('#username').html data
 
@@ -27,13 +30,14 @@ $(document).ready ->
       $('.btn_batch').click ->
         $('#bloc_metrics h3').html $(this).html()
         id_batch = $(this).data "id"
+        $("input[name='id_batch']").val id_batch
+        
         $.getJSON '/metricsbyuser.json', (data) ->
           #Inialisation du tableau
           $('#tab-metrics').empty()
           $('#bloc_metrics svg').empty()
           entete = "<th>Timestamp</th>"
           entete += "<th>Value</th>"
-          entete += "<th>Suppr</th>"
           $('#tab-metrics').append(entete)
 
           #Récupération des metrics du batch correspondant
@@ -44,7 +48,6 @@ $(document).ready ->
               $('#tab-metrics').append "<tr></tr>"
               $('#tab-metrics tr:eq('+i+')').append "<td>#{m.timestamp}</td>"
               $('#tab-metrics tr:eq('+i+')').append "<td>#{m.value}</td>"
-              $('#tab-metrics tr:eq('+i+')').append "<td><button class='btn btn-danger btn_suppr' data-id='#{m.id_metric}'>X</button></td>"
 
               tab[i] =
                 "timestamp" : "#{m.timestamp}"
@@ -55,12 +58,12 @@ $(document).ready ->
           $('#graph').empty()
 
           margin =
-            top: 20
+            top: 10
             right: 20
-            bottom: 20
+            bottom: 30
             left: 20
           width = 300 - (margin.left) - (margin.right)
-          height = 200 - (margin.top) - (margin.bottom)
+          height = 230 - (margin.top) - (margin.bottom)
           formatInt = d3.format("d");
           x = d3.scale.ordinal().rangeRoundBands([
             0
@@ -72,19 +75,12 @@ $(document).ready ->
           ])
           xAxis = d3.svg.axis().scale(x).orient('bottom')
           yAxis = d3.svg.axis().scale(y).orient('left').tickFormat(formatInt)
-          tip = d3.tip().attr('class', 'd3-tip').offset([
-            -10
-            0
-          ]).html((d) ->
-            '<strong>Value:</strong> <span style=\'color:red\'>' + d.value + '</span>'
-          )
+
           svg = d3.select('#graph').attr('width', width + margin.left + margin.right).attr('height', height + margin.top + margin.bottom).append('g').attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
           type = (d) ->
             d.value = +d.value
             d
-
-          svg.call tip
 
           x.domain tab.map((d) ->
             d.timestamp
@@ -103,6 +99,6 @@ $(document).ready ->
             y d.value
           ).attr('height', (d) ->
             height - y(d.value)
-          ).on('mouseover', tip.show).on 'mouseout', tip.hide
+          )
 
           $('#bloc_metrics').show()

@@ -59,7 +59,7 @@ section {
   text-decoration: underline;
 }
 main #bloc_metrics {
-  margin-top: 7%;
+  margin-top: 2%;
 }
 main #bloc_metrics h3 {
   text-align: center;
@@ -77,6 +77,10 @@ main #bloc_metrics #graph {
 }
 .btn_batch {
   margin-left: 1%;
+}
+.btn_add_metric {
+  margin-top: 2%;
+  margin-bottom: 3%;
 }
 footer p {
   margin-top: 4%;

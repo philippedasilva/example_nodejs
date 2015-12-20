@@ -4,8 +4,7 @@ div.container
   block content
     main
       .row
-        div.col-lg-2
-        div#page_user.col-lg-8
+        div#page_user
           .row
             section#connected
               h3 User Page
@@ -38,18 +37,23 @@ div.container
                 h3
 
               .row
-                div.col-lg-1.col-md-1.col-sm-1.col-xs-1
-                table#tab-metrics(border="1").col-lg-3.col-md-3.col-sm-3.col-xs-3
-                div.col-lg-1.col-md-1.col-sm-1.col-xs-1
-                svg#graph.col-lg-6.col-md-6.col-sm-6.col-xs-6
-                div.col-lg-1.col-md-1.col-sm-1.col-xs-1
+                div.col-lg-5.col-md-5.col-sm-4.col-xs-4
+                button.btn.btn-warning.btn_add_metric.col-lg-2.col-md-2.col-sm-4.col-xs-4 Add metric
+                div.col-lg-5.col-md-5.col-sm-4.col-xs-4
+
               .row
                 form.form-inline#save(action='metric/save.json',method='post')
-                  input(type='text',name='id_batch', class='form-control', placeholder="ID BATCH")
-                  input(type='text',name='id', class='form-control', placeholder="ID METRIC")
-                  input(type='text',name='timestamp', class='form-control', placeholder="Param1")
-                  input(type='text',name='value', class='form-control', placeholder="Param2")
+                  input(type='hidden',name='id_batch', class='form-control')
+                  input(type='text',name='id_metric', class='form-control', placeholder="Id Metric")
+                  input(type='text',name='timestamp', class='form-control', placeholder="Timestamp")
+                  input(type='text',name='value', class='form-control', placeholder="Value")
                   input(type='submit', name='submit',class='form-control btn btn-primary',value='Save')
 
+              .row
+                div.col-lg-1.col-md-1.col-sm-1.col-xs-1
+                table#tab-metrics(border="1").table-hover.col-lg-3.col-md-3.col-sm-3.col-xs-12
+                div.col-lg-1.col-md-1.col-sm-1.col-xs-2
+                svg#graph.col-lg-6.col-md-6.col-sm-6.col-xs-9
+                div.col-lg-1.col-md-1.col-sm-1.col-xs-1
+
             section.col-lg-1.col-md-1.col-sm-1.col-xs-1
-        div.col-lg-2
